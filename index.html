@@ -13,6 +13,16 @@
     margin: 0;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
+  #overlayImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;   /* Se adapta al ancho del canvas */
+    height: 100%;  /* Se adapta al alto del canvas */
+    pointer-events: none; /* Permite que hagas clic en iconos y ventanas debajo */
+    object-fit: cover;    /* Ajusta la imagen manteniendo proporción */
+    z-index: 6000;           /* Debe estar por encima del canvas pero debajo de ventanas si quieres */
+  }
 
   /* CANVAS central */
   .canvas {
@@ -29,11 +39,16 @@
     padding: 15px;
   }
 
-  /* Iconos estilo escritorio */
   .desktop {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .desktop .icon {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s, filter 0.2s;
   }
 
   .icon {
@@ -42,6 +57,10 @@
     color: white;
     cursor: pointer;
     user-select: none;
+  }
+  .icon:hover {
+    transform: translate(-50%, -50%) scale(1.15);
+    filter: brightness(1.2);
   }
   .icon img {
     width: 64px;
@@ -197,6 +216,53 @@
     gap: 20px;
     align-items: flex-start;
   }
+  /* Barra de tareas dentro del canvas */
+.canvas .taskbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: rgba(56, 56, 56, 0.9);
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  box-shadow: 0 -3px 10px rgba(0,0,0,0.5);
+  z-index: 500;
+  gap: 10px;
+}
+
+/* Botón de ayuda */
+.canvas .taskbar button {
+  background: #979797;
+  color: #ebebeb;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.canvas .taskbar button:hover {
+  background: #b6b6b6;
+  transform: scale(1.1);
+}
+
+/* Tooltip relativo al canvas */
+.canvas .tooltip {
+  position: absolute;
+  bottom: 60px;
+  left: 20px;
+  background: rgba(34, 34, 34, 0.8);
+  color: rgb(97, 97, 97);
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-size: 14px;
+  display: none;
+  max-width: 250px;
+  z-index: 600;
+}
   .profile img {
     width: 120px;
     height: 120px;
@@ -233,6 +299,8 @@
   form button:hover {
     background: #2d5d90;
   }
+
+
   /* Ventanas sobre móviles */
 @media (max-width: 768px) {
   .canvas {
@@ -261,13 +329,23 @@
     flex-direction: column;
     align-items: center;
   }
+  .canvas .taskbar .clock {
+  margin-left: auto; /* Empuja el reloj hacia la derecha */
+  color: #ffffff;    /* Texto blanco */
+  font-weight: bold;
+  font-size: 14px;
+  padding: 0 10px;
+  text-align: right;
+  user-select: none;
+}
 }
 </style>
 </head>
 <body>
+<img src="img/Monitor.png" id="overlayImage" alt="Overlay">
 
 <div class="canvas">
-  <div class="desktop">
+  <div class="desktop" id="desktopIcons">
     <div class="icon" onclick="openWindow('about')">
       <img src="img/AboutMe.png">
       <span>Sobre mí</span>
@@ -365,6 +443,7 @@
     </div>
   </div>
   </div>
+ 
   <!-- Ventana Contacto -->
   <div class="window" id="contact">
     <div class="title-bar">
@@ -386,6 +465,16 @@
       </p>
     </div>
   </div>
+  <!-- Barra de tareas dentro del canvas -->
+  <div class="taskbar">
+    <button id="helpBtn">Ayuda</button>
+    <div id="taskbarClock" class="clock"></div>
+  </div>
+
+  <!-- Tooltip de ayuda dentro del canvas -->
+  <div id="helpTooltip" class="tooltip">
+    Haz clic en los iconos del escritorio para abrir las ventanas con tu información, proyectos, habilidades y redes sociales.
+  </div>
   <!-- Ventana Currículum -->
     <div class="window" id="cv">
       <div class="title-bar">
@@ -394,7 +483,7 @@
       </div>
       <div class="content">
         <p>Aquí puedes ver mi resumen profesional y descargar mi CV.</p>
-        <a href="CV_Alberto.pdf" download>Descargar PDF</a>
+        <a href="pdf/CV.pdf" download>Descargar PDF</a>
       </div>
     </div>
 
@@ -557,26 +646,32 @@
         <button class="close" onclick="closeWindow('social')">×</button>
       </div>
       <div class="content" style="display:flex; flex-direction:column; gap:10px;">
-        <a href="https://github.com/tuUsuario" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
-          <img src="https://cdn-icons-png.flaticon.com/64/25/25231.png" alt="GitHub" style="width:24px; height:24px;">
-          <span>GitHub</span>
-        </a>
-        <a href="https://www.linkedin.com/in/tuUsuario" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
+        
+        <a href="https://www.linkedin.com/in/alberto-palomino-monta%C3%B1ez/" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
           <img src="https://cdn-icons-png.flaticon.com/64/174/174857.png" alt="LinkedIn" style="width:24px; height:24px;">
           <span>LinkedIn</span>
         </a>
-        <a href="https://twitter.com/tuUsuario" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
-          <img src="https://cdn-icons-png.flaticon.com/64/733/733579.png" alt="Twitter" style="width:24px; height:24px;">
-          <span>Twitter</span>
+        <a href="https://alvert04games.itch.io/" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
+          <img src="https://static.itch.io/images/itchio-textless-black.svg" alt="Itch.io" style="width:24px; height:24px;">
+          <span>Itch.io</span>
         </a>
-        <a href="https://www.instagram.com/tuUsuario" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
-          <img src="https://cdn-icons-png.flaticon.com/64/174/174855.png" alt="Instagram" style="width:24px; height:24px;">
-          <span>Instagram</span>
+        <a href="https://gamejolt.com/@Alvert04Games" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
+          <img src="https://m.gjcdn.net/fireside-post-image/600/24010743-ll-sfbhunum-v4.webp" alt="Gamejolt" style="width:24px; height:24px;">
+          <span>Gamejolt</span>
         </a>
-        <a href="https://www.youtube.com/@tuUsuario" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
+        <a href="https://github.com/Alvert04" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
+          <img src="https://cdn-icons-png.flaticon.com/64/25/25231.png" alt="GitHub" style="width:24px; height:24px;">
+          <span>GitHub</span>
+        </a>
+        <a href="https://www.artstation.com/alvert04" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
+          <img src="https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/27_Artstation_logo_logos-512.png" alt="ArtStation" style="width:24px; height:24px;">
+          <span>ArtStation</span>
+        </a>
+        <a href="https://www.youtube.com/@powerlinestudios" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
           <img src="https://cdn-icons-png.flaticon.com/64/1384/1384060.png" alt="YouTube" style="width:24px; height:24px;">
           <span>YouTube</span>
         </a>
+        
       </div>
     </div>
 </div>
@@ -674,23 +769,32 @@
   //skills
   const skillsData = {
     technical: [
-      { name: "C#", value: 90 },
-      { name: "JavaScript", value: 85 },
-      { name: "Python", value: 80 },
-      { name: "Java", value: 70 },
-      { name: "C++", value: 60 },
-      { name: "VR Development", value: 75 },
-      { name: "Multiplayer Programming", value: 80 },
-      { name: "Backend Systems", value: 85 }
+      { name: "C#", value: 75 },
+      { name: "JavaScript", value: 75 },
+      { name: "Python", value: 70 },
+      { name: "Java", value: 20 },
+      { name: "C++", value: 40 },
+      { name: "VR Development", value: 40 },
+      { name: "Multiplayer Programming", value: 60 },
+      { name: "Algorithm", value: 30 },
+      { name: "Unity", value: 75 },
+      { name: "Optimization", value:40},
+      { name: "Bases de datos (SQL/NoSQL)", value:50},
+      { name: "CUDA / GPU programming", value:40},
+      { name: "Github", value:80},
     ],
     artistic: [
-      { name: "Texturizado", value: 90 },
-      { name: "Modelado 3D", value: 80 },
-      { name: "Animación 3D", value: 70 },
-      { name: "Concept Art", value: 85 },
-      { name: "Ilustración 2D", value: 80 },
-      { name: "Rigging 3D", value: 65 },
-      { name: "Lighting & Rendering", value: 2 }
+      { name: "Texturizado", value: 95 },
+      { name: "Modelado 3D", value: 90 },
+      { name: "Animación 3D", value: 75 },
+      { name: "Concept Art", value: 30 },
+      { name: "Ilustración 2D", value: 30 },
+      { name: "Rigging 3D", value: 70 },
+      { name: "Lighting & Rendering", value: 95 },
+      { name: "Particle Effects / VFX", value: 60 },
+      { name: "UI/UX Design", value: 85 },
+      { name: "Shaders / Materials", value: 60 },
+
     ]
   };
 
@@ -746,83 +850,89 @@
   translations.en.projectsTitle = "Projects";
   translations.es.projectsTitle = "Proyectos";
 
-  // Datos de proyectos
-  const projectsData = [
-    {
-      id: "proj1",
-      title: "Beyond Salvation: Remnant Protocol",
-      type: "image", src: "img/Proyectos/BeyondVR.jpeg",
-      genre: "Horror",
-      skills: "C#, Texturizado, Modelado, Animacion",
-      duration: "6 meses",
-      role: "Tecnical Artist"
-    },
-    {
-      id: "proj2",
-      type: "image", src: "img/Proyectos/Deadly.png",
-      title: "Deadly Tiles",
-      genre: "VR Experience",
-      skills: "C#, Unity, VR",
-      duration: "4 meses",
-      role: "Programador Principal"
-    },
-    {
-      id: "proj3",
-      type: "video", src: "img/Proyectos/Glitched.mp4",
-      title: "The Glitched Attraction",
-      genre: "2D Platformer",
-      skills: "Python, AI, Level Design",
-      duration: "5 meses",
-      role: "Programador y Diseñador de niveles"
-    },
-    {
-      id: "proj4",
-      type: "image", src: "img/Proyectos/OverScaled.png",
-      title: "Overscaled",
-      genre: "2D Platformer",
-      skills: "Python, AI, Level Design",
-      duration: "5 meses",
-      role: "Programador y Diseñador de niveles"
-    },
-    {
-      id: "proj5",
-      type: "video", src: "img/Proyectos/Beyond.mp4",
-      title: "Beyond Salvation",
-      genre: "2D Platformer",
-      skills: "Python, AI, Level Design",
-      duration: "5 meses",
-      role: "Programador y Diseñador de niveles"
-    },
-    {
-      id: "proj6",
-      type: "image", src: "img/Proyectos/Noah.png",
-      title: "Noah's Countdown",
-      genre: "2D Platformer",
-      skills: "Python, AI, Level Design",
-      duration: "5 meses",
-      role: "Programador y Diseñador de niveles"
-    },
-    {
-      id: "proj7",
-      type: "video", src: "img/Proyectos/Christmas.mp4",
-      title: "Christmas whith Freddy's",
-      genre: "2D Platformer",
-      skills: "Python, AI, Level Design",
-      duration: "5 meses",
-      role: "Programador y Diseñador de niveles"
-    },
-    {
-      id: "proj8",
-      type: "image", src: "img/Proyectos/Purgatory.webp",
-      title: "The Purgatory and the Stolen Souls",
-      genre: "2D Platformer",
-      skills: "Python, AI, Level Design",
-      duration: "5 meses",
-      role: "Programador y Diseñador de niveles"
-    },
-
-  ];
-
+// Project data
+const projectsData = [
+  {
+    id: "proj1",
+    title: "Beyond Salvation: Remnant Protocol",
+    type: "image",
+    src: "img/Proyectos/BeyondVR.jpeg",
+    genre: "VR Survival Horror",
+    skills: "C#, Texturing, 3D Modeling, Animation, Level Design, VR Optimization, VR Interaction",
+    duration: "3 months",
+    role: "Technical Artist"
+  },
+  {
+    id: "proj2",
+    type: "image",
+    src: "img/Proyectos/Deadly.png",
+    title: "Deadly Tiles (Game Jam Project)",
+    genre: "Puzzle, Horror",
+    skills: "Texturing, Animation, Lighting, 3D Modeling, Optimization, Shaders",
+    duration: "1 month",
+    role: "Lead Artist / Technical Artist"
+  },
+  {
+    id: "proj3",
+    type: "video",
+    src: "img/Proyectos/Glitched.mp4",
+    title: "The Glitched Attraction",
+    genre: "Survival Horror",
+    skills: "Set Dressing, 3D Modeling, Animation, Texturing, Enemy & Environment Logic, Optimization",
+    duration: "3 years 4 months",
+    role: "Lead Artist"
+  },
+  {
+    id: "proj4",
+    type: "image",
+    src: "img/Proyectos/OverScaled.png",
+    title: "Overscaled (Game Jam Project)",
+    genre: "3D Platformer, Puzzle",
+    skills: "Environment Creation, Level Design, Game Logic, Programming",
+    duration: "4 days",
+    role: "Lead Artist / Technical Artist"
+  },
+  {
+    id: "proj5",
+    type: "video",
+    src: "img/Proyectos/Beyond.mp4",
+    title: "Beyond Salvation",
+    genre: "Survival Horror",
+    skills: "3D Modeling, Texturing, Level Design, Game Logic",
+    duration: "2 years",
+    role: "Lead Artist / Technical Artist"
+  },
+  {
+    id: "proj6",
+    type: "image",
+    src: "img/Proyectos/Noah.png",
+    title: "Noah's Countdown",
+    genre: "2D Platformer",
+    skills: "Level Design, Environment Creation, 2D Modeling, Texturing",
+    duration: "1 month",
+    role: "Lead Artist"
+  },
+  {
+    id: "proj7",
+    type: "video",
+    src: "img/Proyectos/Christmas.mp4",
+    title: "Christmas with Freddy's",
+    genre: "2D Point-and-Click, Horror",
+    skills: "Set Dressing, Texturing, 3D/2D Modeling, Programming",
+    duration: "5 months",
+    role: "Artist & Level Designer"
+  },
+  {
+    id: "proj8",
+    type: "image",
+    src: "img/Proyectos/Purgatory.webp",
+    title: "The Purgatory and the Stolen Souls",
+    genre: "2D Run and Gun",
+    skills: "Animation, 2D Modeling, Level Design, Game Logic",
+    duration: "5 months",
+    role: "Programmer & Level Designer"
+  }
+];
   function renderProjectList() {
     const container = document.getElementById("projectsList");
     container.innerHTML = "";
@@ -929,6 +1039,58 @@
   document.getElementById("langSelect").addEventListener("change", e => {
     setLanguage(e.target.value);
   });
+  const helpBtn = document.getElementById("helpBtn");
+  const helpTooltip = document.getElementById("helpTooltip");
+
+  helpBtn.addEventListener("click", () => {
+    if(helpTooltip.style.display === "block") {
+      helpTooltip.style.display = "none";
+    } else {
+      helpTooltip.style.display = "block";
+      setTimeout(() => helpTooltip.style.display = "none", 6000); // se oculta tras 6s
+    }
+  });
+
+  function updateClock() {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2,'0');
+  const minutes = now.getMinutes().toString().padStart(2,'0');
+  const seconds = now.getSeconds().toString().padStart(2,'0');
+  const options = { weekday: 'short', month: 'short', day: 'numeric' };
+  const dateStr = now.toLocaleDateString('es-ES', options); // puedes cambiar a 'en-US'
+  document.getElementById('taskbarClock').innerText = `${hours}:${minutes}:${seconds}  ${dateStr}`;
+}
+
+// Actualiza cada segundo
+setInterval(updateClock, 1000);
+updateClock(); // Inicial
+
+function arrangeIconsCircle(radiusPercent = 0.35) {
+  const container = document.getElementById('desktopIcons');
+  if (!container) return;
+
+  const icons = container.querySelectorAll('.icon');
+  const centerX = container.offsetWidth / 2;
+  const centerY = container.offsetHeight / 2;
+
+  // Calculamos radio relativo al tamaño del contenedor
+  const radius = Math.min(container.offsetWidth, container.offsetHeight) * radiusPercent;
+
+  const total = icons.length;
+
+  icons.forEach((icon, i) => {
+    const angle = (i / total) * 2 * Math.PI;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+    icon.style.left = `${x}px`;
+    icon.style.top = `${y}px`;
+  });
+}
+
+// Ejecutar al cargar y al redimensionar ventana
+window.addEventListener('load', () => arrangeIconsCircle(0.35));
+window.addEventListener('resize', () => arrangeIconsCircle(0.35));
+
 </script>
 
 </body>
