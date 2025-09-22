@@ -38,6 +38,11 @@
     overflow: hidden;
     padding: 15px;
   }
+  /* Animación de puntos */
+  @keyframes bounce {
+    0%, 80%, 100% { transform: scale(0.8); opacity:0.5; }
+    40% { transform: scale(1.3); opacity:1; }
+  }
 
   .desktop {
     position: relative;
@@ -302,49 +307,38 @@
 
 
   /* Ventanas sobre móviles */
-@media (max-width: 768px) {
-  .canvas {
-    width: 100%;
-    height: 100vh;
-    padding: 10px;
-  }
-  .icon {
-    width: 60px;
-  }
-  .icon img {
-    width: 48px;
-    height: 48px;
-  }
-  .window {
-    min-width: 90%;
-    width: 90%;
-    top: 50px !important;
-    left: 5% !important;
-    max-height: 85%;
-  }
-  #projectsList {
-    max-height: 300px;
-  }
-  .profile {
-    flex-direction: column;
-    align-items: center;
-  }
-  .canvas .taskbar .clock {
-  margin-left: auto; /* Empuja el reloj hacia la derecha */
-  color: #ffffff;    /* Texto blanco */
-  font-weight: bold;
-  font-size: 14px;
-  padding: 0 10px;
-  text-align: right;
-  user-select: none;
-}
-}
+
+
 </style>
 </head>
 <body>
 <img src="img/Monitor.png" id="overlayImage" alt="Overlay">
 
 <div class="canvas">
+  <!-- Pantalla de carga -->
+  <div id="loadingScreen" style="
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:#020B56; 
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:2000;
+    flex-direction:column;
+    color:white;
+    font-family:sans-serif;
+    font-size:24px;
+    transition: opacity 1s ease;
+  ">
+    <div class="loading-text">Cargando</div>
+    <div class="loading-dots" style="display:flex; gap:5px; margin-top:10px;">
+      <div style="width:8px; height:8px; border-radius:50%; background:white; animation: bounce 1s infinite;"></div>
+      <div style="width:8px; height:8px; border-radius:50%; background:white; animation: bounce 1s infinite 0.2s;"></div>
+      <div style="width:8px; height:8px; border-radius:50%; background:white; animation: bounce 1s infinite 0.4s;"></div>
+    </div>
+  </div>
+  
   <div class="desktop" id="desktopIcons">
     <div class="icon" onclick="openWindow('about')">
       <img src="img/AboutMe.png">
@@ -701,25 +695,67 @@
     el.style.zIndex = topZ;
   }
 
-  // Hacer ventanas arrastrables
-  document.querySelectorAll('.window').forEach(win=>{
-    const bar = win.querySelector('.title-bar');
-    let offsetX, offsetY, isDown=false;
+// función que hace draggable una ventana (limitada al área .canvas)
+function makeWindowDraggable(win) {
+  const bar = win.querySelector('.title-bar');
+  if (!bar) return;
 
-    bar.addEventListener('mousedown', (e)=>{
-      isDown = true;
-      bringToFront(win);
-      offsetX = e.clientX - win.offsetLeft;
-      offsetY = e.clientY - win.offsetTop;
-    });
+  let offsetX = 0, offsetY = 0;
+  let dragging = false;
+  const canvas = document.querySelector('.canvas'); // tu canvas tiene clase "canvas"
+  if (!canvas) return;
 
-    document.addEventListener('mouseup', ()=> isDown=false);
-    document.addEventListener('mousemove', (e)=>{
-      if(!isDown) return;
-      win.style.left = (e.clientX - offsetX) + 'px';
-      win.style.top  = (e.clientY - offsetY) + 'px';
-    });
+  bar.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    const canvasRect = canvas.getBoundingClientRect();
+
+    // posición del puntero dentro del canvas
+    const pointerX = e.clientX - canvasRect.left;
+    const pointerY = e.clientY - canvasRect.top;
+
+    // offset relativo a la esquina de la ventana
+    offsetX = pointerX - win.offsetLeft;
+    offsetY = pointerY - win.offsetTop;
+
+    dragging = true;
+    bringToFront(win);
+
+    function onMouseMove(ev) {
+      if (!dragging) return;
+      const rect = canvas.getBoundingClientRect();
+
+      // nueva posición relativa al canvas
+      let newLeft = ev.clientX - rect.left - offsetX;
+      let newTop  = ev.clientY - rect.top  - offsetY;
+
+      // límites (que la ventana no salga del canvas)
+      const maxLeft = canvas.clientWidth - win.offsetWidth;
+      const maxTop  = canvas.clientHeight - win.offsetHeight;
+
+      if (newLeft < 0) newLeft = 0;
+      if (newTop  < 0) newTop  = 0;
+      if (newLeft > maxLeft) newLeft = maxLeft;
+      if (newTop  > maxTop) newTop  = maxTop;
+
+      win.style.left = newLeft + 'px';
+      win.style.top  = newTop  + 'px';
+    }
+
+    function onMouseUp() {
+      dragging = false;
+      // guardar posición por si cierras/abres (tu objeto positions ya existe)
+      positions[win.id] = { left: win.style.left, top: win.style.top };
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   });
+}
+
+// Inicializar las ventanas ya existentes
+document.querySelectorAll('.window').forEach(makeWindowDraggable);
   
 
   // Diccionario de traducciones
@@ -781,7 +817,7 @@
       { name: "Optimization", value:40},
       { name: "Bases de datos (SQL/NoSQL)", value:50},
       { name: "CUDA / GPU programming", value:40},
-      { name: "Github", value:80},
+      { name: "Github", value:70},
     ],
     artistic: [
       { name: "Texturizado", value: 95 },
@@ -1091,6 +1127,15 @@ function arrangeIconsCircle(radiusPercent = 0.35) {
 window.addEventListener('load', () => arrangeIconsCircle(0.35));
 window.addEventListener('resize', () => arrangeIconsCircle(0.35));
 
+window.addEventListener("load", () => {
+  const loader = document.getElementById("loadingScreen");
+  
+  // Esperar 2.5s y hacer fade out
+  setTimeout(() => {
+    loader.style.opacity = "0";
+    setTimeout(() => loader.style.display = "none", 1000); // quitarlo tras el fade
+  }, 2500);
+});
 </script>
 
 </body>
