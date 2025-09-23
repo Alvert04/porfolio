@@ -4,6 +4,63 @@
 <meta charset="UTF-8">
 <title>Mi Portfolio - Escritorio</title>
 <style>
+@media (max-width: 600px) {
+  .desktop {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-auto-rows: minmax(120px, auto) !important;
+    gap: 22px !important;
+    justify-items: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    height: auto !important;
+    position: static !important;
+    padding: 18px 0 !important;
+  }
+  .desktop .icon {
+    position: static !important;
+    transform: none !important;
+    width: 120px !important;
+    height: 120px !important;
+    font-size: 18px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    touch-action: manipulation !important;
+  }
+  .icon img {
+    width: 100px !important;
+    height: 100px !important;
+    margin-bottom: 6px !important;
+  }
+  .icon span {
+    font-size: 18px !important;
+    text-shadow: 1px 1px 2px black !important;
+  }
+}
+@media (max-width: 600px) {
+  .canvas {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    border-radius: 0;
+    padding: 5px;
+    box-sizing: border-box;
+  }
+  #overlayImage {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    left: 0;
+    top: 0;
+    object-fit: cover;
+  }
+}
   body {
     background: black;
     display: flex;
@@ -26,17 +83,19 @@
 
   /* CANVAS central */
   .canvas {
-    width: 90%;
-    max-width: 1200px;
-    height: 80%;
-    background: url('img/fondo.png') no-repeat center center;
-    background-size: cover;
-    border: 1px solid #4a607d;
-    border-radius: 10px;
-    box-shadow: 0 0 25px rgba(0,0,0,0.6);
-    position: relative;
-    overflow: hidden;
-    padding: 15px;
+  width: 90%;
+  max-width: 1200px;
+  height: 80%;
+  background: url('img/fondo.png') no-repeat center center;
+  background-size: cover;
+  border: 1px solid #4a607d;
+  border-radius: 10px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.6);
+  position: relative;
+  overflow: hidden;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
   }
   /* Animación de puntos */
   @keyframes bounce {
@@ -223,9 +282,9 @@
   }
   /* Barra de tareas dentro del canvas */
 .canvas .taskbar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  /* position: absolute; */
+  /* bottom: 0; */
+  /* left: 0; */
   width: 100%;
   height: 40px;
   background: rgba(56, 56, 56, 0.9);
@@ -331,7 +390,7 @@
     font-size:24px;
     transition: opacity 1s ease;
   ">
-    <div class="loading-text">Cargando</div>
+    <div class="loading-text" data-i18n="loading">Cargando</div>
     <div class="loading-dots" style="display:flex; gap:5px; margin-top:10px;">
       <div style="width:8px; height:8px; border-radius:50%; background:white; animation: bounce 1s infinite;"></div>
       <div style="width:8px; height:8px; border-radius:50%; background:white; animation: bounce 1s infinite 0.2s;"></div>
@@ -379,105 +438,109 @@
       <span data-i18n="cvIcon">Currículum</span>
     </div>
   </div>
-  <!-- Selector de idioma -->
-  <div style="position: absolute; top: 10px; right: 20px; z-index: 1000;">
-    <label for="langSelect" style="color:white; font-weight:bold;">🌐</label>
-    <select id="langSelect">
-      <option value="en" selected>English</option>
-      <option value="es">Español</option>
-    </select>
-  </div>
-  <!-- Ventana Sobre mí -->
-  <div class="window" id="about">
-    <div class="title-bar">
-      <span data-i18n="aboutTitle">About Me</span>
-      <button class="close" onclick="closeWindow('about')">×</button>
-    </div>
-    <div class="content" style="display:flex; gap:20px; align-items:flex-start;">
 
-    <!-- Lateral izquierdo -->
-    <div style="display:flex; flex-direction:column; align-items:center; min-width:150px;">
-      <img src="img/perfil.jpeg" alt="Foto de perfil"
-           style="width:120px; height:120px; border-radius:8px; object-fit:cover; box-shadow:0 3px 6px rgba(0,0,0,0.3);">
+    <!-- Selector de idioma -->
+    <div style="position: absolute; top: 10px; right: 20px; z-index: 1000;">
+      <label for="langSelect" style="color:white; font-weight:bold;">🌐</label>
+      <select id="langSelect">
+        <option value="en" selected>English</option>
+        <option value="es">Español</option>
+      </select>
+    </div>
+
+    <!-- Ventana Sobre mí -->
+    <div class="window" id="about">
+      <div class="title-bar">
+        <span data-i18n="aboutTitle">About Me</span>
+        <button class="close" onclick="closeWindow('about')">×</button>
+      </div>
+      <div class="content" style="display:flex; gap:20px; align-items:flex-start;">
+
+      <!-- Lateral izquierdo -->
+      <div style="display:flex; flex-direction:column; align-items:center; min-width:150px;">
+        <img src="img/perfil.jpeg" alt="Foto de perfil"
+            style="width:120px; height:120px; border-radius:8px; object-fit:cover; box-shadow:0 3px 6px rgba(0,0,0,0.3);">
+        
+        <!-- Sección lateral -->
+        <div style="margin-top:15px; text-align:center; font-size:14px;">
+          <h4 data-i18n="languagesTitle">Languages</h4>
+          <ul style="list-style:disc; padding-left:20px; text-align:left;">
+            <li data-i18n="lang1">Spanish (native)</li>
+            <li data-i18n="lang2">English (fluent)</li>
+          </ul>
       
-      <!-- Sección lateral -->
-      <div style="margin-top:15px; text-align:center; font-size:14px;">
-        <h4 data-i18n="languagesTitle">Languages</h4>
-        <ul style="list-style:disc; padding-left:20px; text-align:left;">
-          <li data-i18n="lang1">Spanish (native)</li>
-          <li data-i18n="lang2">English (fluent)</li>
+          <h4 data-i18n="interestsTitle" style="margin-top:10px;">Interests</h4>
+          <ul style="list-style:disc; padding-left:20px; text-align:left;">
+            <li data-i18n="interest1">Indie games</li>
+            <li data-i18n="interest2">Multiplayer programming</li>
+            <li data-i18n="interest3">Virtual reality</li>
+            <li data-i18n="interest4">AI and new technologies</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Contenido principal -->
+      <div style="flex:1;">
+        <h3 data-i18n="greeting">Hi, I'm Alberto 👋</h3>
+      
+        <h4 data-i18n="experienceTitle">Experience</h4>
+        <ul>
+          <li data-i18n="bio1">I am a programmer with experience in game development, focused on systems and backend programming.</li>
+          <li data-i18n="bio2">Since 2018 I have participated in indie projects, working with languages like C#, Python, and JavaScript.</li>
+          <li data-i18n="bio2extra">I have experience in multiplayer programming in C# and VR development.</li>
         </ul>
-    
-        <h4 data-i18n="interestsTitle" style="margin-top:10px;">Interests</h4>
-        <ul style="list-style:disc; padding-left:20px; text-align:left;">
-          <li data-i18n="interest1">Indie games</li>
-          <li data-i18n="interest2">Multiplayer programming</li>
-          <li data-i18n="interest3">Virtual reality</li>
-          <li data-i18n="interest4">AI and new technologies</li>
-        </ul>
+      
+        <h4 data-i18n="educationTitle">Education</h4>
+        <p data-i18n="bio3">I graduated from URJC in Video Game Design and Development.</p>
+      
+        <h4 data-i18n="passionTitle">Passion</h4>
+        <p data-i18n="bio4">I am passionate about creating immersive worlds and learning new technologies to improve every project.</p>
       </div>
     </div>
-    
-    <!-- Contenido principal -->
-    <div style="flex:1;">
-      <h3 data-i18n="greeting">Hi, I'm Alberto 👋</h3>
-    
-      <h4 data-i18n="experienceTitle">Experience</h4>
-      <ul>
-        <li data-i18n="bio1">I am a programmer with experience in game development, focused on systems and backend programming.</li>
-        <li data-i18n="bio2">Since 2018 I have participated in indie projects, working with languages like C#, Python, and JavaScript.</li>
-        <li data-i18n="bio2extra">I have experience in multiplayer programming in C# and VR development.</li>
-      </ul>
-    
-      <h4 data-i18n="educationTitle">Education</h4>
-      <p data-i18n="bio3">I graduated from URJC in Video Game Design and Development.</p>
-    
-      <h4 data-i18n="passionTitle">Passion</h4>
-      <p data-i18n="bio4">I am passionate about creating immersive worlds and learning new technologies to improve every project.</p>
     </div>
-  </div>
-  </div>
  
-  <!-- Ventana Contacto -->
-  <div class="window" id="contact">
-    <div class="title-bar">
-      <span data-i18n="contactTitle">Contáctame</span>
-      <button class="close" onclick="closeWindow('contact')">×</button>
+    <!-- Ventana Contacto -->
+    <div class="window" id="contact">
+      <div class="title-bar">
+        <span data-i18n="contactTitle">Contáctame</span>
+        <button class="close" onclick="closeWindow('contact')">×</button>
+      </div>
+      <div class="content">
+        <p data-i18n="contactMsg">Envíame un mensaje directamente a mi correo:</p>
+        <!-- Opción rápida: mailto -->
+        <form action="mailto:albertopm6b@gmail.com" method="post" enctype="text/plain">
+          <input type="text" name="nombre" placeholder="Tu nombre" data-i18n-placeholder="namePlaceholder" required>
+          <input type="email" name="email" placeholder="Tu correo" data-i18n-placeholder="emailPlaceholder" required>
+          <textarea name="mensaje" rows="5" placeholder="Tu mensaje..." data-i18n-placeholder="msgPlaceholder" required></textarea>
+          <button type="submit" data-i18n="sendBtn">Enviar</button>
+        </form>
+        <p style="font-size:12px;color:#555;margin-top:8px;" data-i18n="contactNote">
+          ⚠ Nota: Este formulario abrirá tu cliente de correo.  
+          Para envío directo sin cliente, recomiendo integrar <strong>EmailJS</strong>.
+        </p>
+      </div>
     </div>
-    <div class="content">
-      <p data-i18n="contactMsg">Envíame un mensaje directamente a mi correo:</p>
-      <!-- Opción rápida: mailto -->
-      <form action="mailto:albertopm6b@gmail.com" method="post" enctype="text/plain">
-        <input type="text" name="nombre" placeholder="Tu nombre" data-i18n-placeholder="namePlaceholder" required>
-        <input type="email" name="email" placeholder="Tu correo" data-i18n-placeholder="emailPlaceholder" required>
-        <textarea name="mensaje" rows="5" placeholder="Tu mensaje..." data-i18n-placeholder="msgPlaceholder" required></textarea>
-        <button type="submit" data-i18n="sendBtn">Enviar</button>
-      </form>
-      <p style="font-size:12px;color:#555;margin-top:8px;" data-i18n="contactNote">
-        ⚠ Nota: Este formulario abrirá tu cliente de correo.  
-        Para envío directo sin cliente, recomiendo integrar <strong>EmailJS</strong>.
-      </p>
-    </div>
-  </div>
-  <!-- Barra de tareas dentro del canvas -->
-  <div class="taskbar">
-  <button id="helpBtn" data-i18n="helpBtn">Ayuda</button>
-    <div id="taskbarClock" class="clock"></div>
-  </div>
 
-  <!-- Tooltip de ayuda dentro del canvas -->
-  <div id="helpTooltip" class="tooltip">
-  <span data-i18n="helpTooltip">Haz clic en los iconos del escritorio para abrir las ventanas con tu información, proyectos, habilidades y redes sociales.</span>
-  </div>
-  <!-- Ventana Currículum -->
+    <!-- Barra de tareas dentro del canvas -->
+    <div class="taskbar">
+    <button id="helpBtn" data-i18n="helpBtn">Ayuda</button>
+      <div id="taskbarClock" class="clock"></div>
+    </div>
+
+    <!-- Tooltip de ayuda dentro del canvas -->
+    <div id="helpTooltip" class="tooltip">
+    <span data-i18n="helpTooltip">Haz clic en los iconos del escritorio para abrir las ventanas con tu información, proyectos, habilidades y redes sociales.</span>
+    </div>
+
+    <!-- Ventana Currículum -->
     <div class="window" id="cv">
       <div class="title-bar">
-        <span data-i18n="cvTitle">Currículum</span>
+        <span data-i18n="cvTitle"></span>
         <button class="close" onclick="closeWindow('cv')">×</button>
       </div>
       <div class="content">
-        <p>Aquí puedes ver mi resumen profesional y descargar mi CV.</p>
-        <a href="pdf/CV.pdf" download>Descargar PDF</a>
+        <p data-i18n="cvMsg"></p>
+        <a href="pdf/CV.pdf" download data-i18n="cvDownload"></a>
       </div>
     </div>
 
@@ -493,7 +556,6 @@
         <div class="programs-section">
           <h4 data-i18n="techSkills">⚙️ Técnicos</h4>
           <ul>
-
             <li data-i18n="unity">Unity</li>
             <li data-i18n="visualStudio">Visual Studio / VS Code</li>
             <li data-i18n="pycharm">Pycharm</li>
@@ -501,7 +563,6 @@
             <li data-i18n="databases">Bases de datos (SQL y NoSQL)</li>
             <li data-i18n="concurrentProgramming">Programación concurrente (C#, hilos, semáforos, sincronización)</li>
             <li data-i18n="cuda">CUDA (programación en GPU, nivel básico)</li>
-
           </ul>
         </div>
 
@@ -519,92 +580,97 @@
         </div>
 
       </div>
-</div>
+  </div>
 
-    <!-- Ventana Educación -->
-    <div class="window" id="education">
-      <div class="title-bar">
-        <span data-i18n="educationTitle"></span>Educación</span>
-        <button class="close" onclick="closeWindow('education')">×</button>
-      </div>
-      <div class="content education">
-
-        <div class="edu-item">
-          <h4 data-i18n="degreeTitle">🎓 Grado en Diseño y Desarrollo de Videojuegos</h4>
-          <ul><ul>
-            <li data-i18n="university">Escuela tecnica superior de ingenieria informatica - Universidad Rey Juan Carlos </li>
-            <li data-i18n="location">Lugar: Madrid </li>
-            <li data-i18n="average">Media: 7,7</li>
-          </ul></ul>
-        </div>
-
-        <div class="edu-item">
-          <h4 data-i18n="baccalaureateTitle">🎓 Bachillerato</h4>
-         <ul><ul>
-            <li data-i18n="university">La Salle Virlecha </li>
-            <li data-i18n="location">Lugar: Antequera, Málaga </li>
-            <li data-i18n="average">Media: 8.5</li>
-          </ul></ul>
-        </div>
-
-        
-
-        <div class="edu-item">
-          <h4>📜 Cursos y Certificados</h4>
-          <ul>
-            <li>Certificado B1 – Cambridge</li>
-          </ul>
-        </div>
-
-      </div>
+  <!-- Ventana Educación -->
+  <div class="window" id="education">
+    <div class="title-bar">
+      <span data-i18n="educationTitleWin"></span>
+      <button class="close" onclick="closeWindow('education')">×</button>
     </div>
+    <div class="content education">
 
-
-    <!-- Ventana Logros -->
-    <div class="window" id="achievements">
-      <div class="title-bar">
-        <span data-i18n="achievementsTitle">Logros</span>
-        <button class="close" onclick="closeWindow('achievements')">×</button>
+      <div class="edu-item">
+        <h4 data-i18n="degreeTitle"></h4>
+        <ul>
+          <li data-i18n="degreeSchool"></li>
+          <li data-i18n="degreePlace"></li>
+          <li data-i18n="degreeGrade"></li>
+        </ul>
       </div>
-      <div class="content achievements">
-    
-        <div class="achievement">
-          <img src="img/Proyectos/Deadly.png" alt="Deadly Tiles" class="ach-thumb">
-          <div class="ach-info">
-            <h4 data-i18n="ach1Title">🏆 Ganador – 5ª Edición Game Jam Game Scholars</h4>
-            <p data-i18n="ach1Project"></p>
-          </div>
-        </div>
 
-        <div class="achievement">
-          <img src="img/Proyectos/GlitchedA.jpg" alt="The Glitched Attraction" class="ach-thumb">
-          <div class="ach-info">
-            <h4>🥈 2º puesto – Gamejolt Awards 2022</h4>
-            <p><strong>Categoría:</strong> Fangame del año<br>
-            <strong>Proyecto:</strong> The Glitched Attraction</p>
-          </div>
-        </div>
-
-        <div class="achievement">
-          <img src="img/Proyectos/GlitchedA.jpg" alt="The Glitched Attraction" class="ach-thumb">
-          <div class="ach-info">
-            <h4>⭐ Impacto en la comunidad</h4>
-            <p><strong>+4 millones</strong> de visualizaciones y <strong>+2 millones</strong> de descargas<br>
-            Proyecto: The Glitched Attraction</p>
-          </div>
-        </div>
-
-        <div class="achievement">
-          <img src="img/Proyectos/GlitchedA.jpg" alt="The Glitched Attraction" class="ach-thumb">
-          <div class="ach-info">
-            <h4>🌍 Reconocimiento internacional</h4>
-            <p>Tendencias de videojuegos en <strong>EE.UU.</strong> y múltiples países<br>
-            Proyecto: The Glitched Attraction</p>
-          </div>
-        </div>
-
+      <div class="edu-item">
+        <h4 data-i18n="bachTitle"></h4>
+        <ul>
+          <li data-i18n="bachSchool"></li>
+          <li data-i18n="bachPlace"></li>
+          <li data-i18n="bachGrade"></li>
+        </ul>
       </div>
+
+      <div class="edu-item">
+        <h4 data-i18n="certTitle"></h4>
+        <ul>
+          <li data-i18n="certB1"></li>
+        </ul>
+      </div>
+
     </div>
+  </div>
+
+
+  <!-- Ventana Logros -->
+  <div class="window" id="achievements">
+    <div class="title-bar">
+      <span data-i18n="achievementsTitle"></span>
+      <button class="close" onclick="closeWindow('achievements')">×</button>
+    </div>
+    <div class="content achievements">
+
+      <div class="achievement">
+        <img src="img/Proyectos/Deadly.png" alt="Deadly Tiles" class="ach-thumb">
+        <div class="ach-info">
+          <h4 data-i18n="ach1Title"></h4>
+          <p>
+            <strong data-i18n="project"></strong> <span data-i18n="ach1Project"></span>
+          </p>
+        </div>
+      </div>
+
+      <div class="achievement">
+        <img src="img/Proyectos/GlitchedA.jpg" alt="The Glitched Attraction" class="ach-thumb">
+        <div class="ach-info">
+          <h4 data-i18n="ach2Title"></h4>
+          <p>
+            <strong data-i18n="category"></strong> <span data-i18n="ach2Cat"></span><br>
+            <strong data-i18n="project"></strong> <span data-i18n="ach2Project"></span>
+          </p>
+        </div>
+      </div>
+
+      <div class="achievement">
+        <img src="img/Proyectos/GlitchedA.jpg" alt="The Glitched Attraction" class="ach-thumb">
+        <div class="ach-info">
+          <h4 data-i18n="ach3Title"></h4>
+          <p>
+            <strong data-i18n="cuatromillones">+4 millones</strong> <span data-i18n="views"></span>  
+            <strong data-i18n="dosmillones">+2 millones</strong> <span data-i18n="downloads"></span><br>
+            <strong data-i18n="project"></strong> <span data-i18n="ach2Project"></span><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="achievement">
+        <img src="img/Proyectos/GlitchedA.jpg" alt="The Glitched Attraction" class="ach-thumb">
+        <div class="ach-info">
+          <h4 data-i18n="ach4Title"></h4>
+          <p data-i18n="ach4Desc"></p>
+          <p><strong data-i18n="project"></strong> <span data-i18n="ach4Project"></span><br>
+        </div>
+      </div>
+
+    </div>
+  </div>
   <!-- Ventana Proyectos -->
     <div class="window" id="projects">
       <div class="title-bar">
@@ -617,22 +683,22 @@
     </div>
 
   <!-- Ventana Habilidades -->
-    <div class="window" id="skills">
-      <div class="title-bar">
-        Habilidades
-        <button class="close" onclick="closeWindow('skills')">×</button>
-      </div>
-      <div class="content">
-        <div style="margin-bottom: 10px;">
-          <label for="skillsType"><strong>Tipo:</strong> </label>
-          <select id="skillsType">
-            <option value="technical" selected>Técnico</option>
-            <option value="artistic">Artístico</option>
-          </select>
-        </div>
-        <div id="skillsContainer"></div>
-      </div>
+  <div class="window" id="skills">
+    <div class="title-bar">
+      <span data-i18n="skillsTitle">Habilidades</span>
+      <button class="close" onclick="closeWindow('skills')">×</button>
     </div>
+    <div class="content">
+      <div style="margin-bottom: 10px;">
+        <label for="skillsType"><strong data-i18n="skillsTypeLabel">Tipo:</strong></label>
+        <select id="skillsType">
+          <option value="technical" data-i18n="skillsTypeTech" selected>Técnico</option>
+          <option value="artistic" data-i18n="skillsTypeArt">Artístico</option>
+        </select>
+      </div>
+      <div id="skillsContainer"></div>
+    </div>
+  </div>
 
   <!-- Ventana Redes sociales -->
     <div class="window" id="social">
@@ -672,6 +738,101 @@
 </div>
 
 <script>
+// Adaptar canvas al hueco transparente de la imagen de overlay
+function adaptCanvasToOverlay() {
+  const overlay = document.getElementById('overlayImage');
+  const canvas = document.querySelector('.canvas');
+  if (!overlay || !canvas) return;
+
+  // Crear un canvas auxiliar para analizar la transparencia
+  const img = new Image();
+  img.src = overlay.src;
+  img.onload = function() {
+    // Crear canvas auxiliar
+    const aux = document.createElement('canvas');
+    aux.width = img.naturalWidth;
+    aux.height = img.naturalHeight;
+    const ctx = aux.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    // Buscar el rectángulo transparente más grande
+    const imageData = ctx.getImageData(0, 0, aux.width, aux.height);
+    let minX = aux.width, minY = aux.height, maxX = 0, maxY = 0;
+    for (let y = 0; y < aux.height; y++) {
+      for (let x = 0; x < aux.width; x++) {
+        const alpha = imageData.data[(y * aux.width + x) * 4 + 3];
+        if (alpha < 10) { // píxel transparente
+          if (x < minX) minX = x;
+          if (x > maxX) maxX = x;
+          if (y < minY) minY = y;
+          if (y > maxY) maxY = y;
+        }
+      }
+    }
+    // Si no hay transparencia, no hacer nada
+    if (maxX <= minX || maxY <= minY) return;
+
+    // Calcular proporciones respecto al tamaño original de la imagen
+    const leftRatio = minX / aux.width;
+    const topRatio = minY / aux.height;
+    const widthRatio = (maxX - minX) / aux.width;
+    const heightRatio = (maxY - minY) / aux.height;
+
+    // Ajustar el canvas teniendo en cuenta object-fit y aspect ratio
+    function resizeCanvas() {
+      const overlayRect = overlay.getBoundingClientRect();
+      // Obtener el tamaño real de la imagen renderizada
+      let imgWidth = overlay.naturalWidth;
+      let imgHeight = overlay.naturalHeight;
+      let renderedWidth = overlayRect.width;
+      let renderedHeight = overlayRect.height;
+
+      // Si object-fit: cover, puede haber recorte
+      const imgAspect = imgWidth / imgHeight;
+      const renderedAspect = renderedWidth / renderedHeight;
+      let offsetX = 0, offsetY = 0;
+      let scale = 1;
+      let visibleWidth = renderedWidth;
+      let visibleHeight = renderedHeight;
+
+      if (window.getComputedStyle(overlay).objectFit === 'cover') {
+        if (renderedAspect > imgAspect) {
+          // recorte lateral (izquierda/derecha)
+          scale = renderedHeight / imgHeight;
+          visibleWidth = imgWidth * scale;
+          offsetX = (renderedWidth - visibleWidth) / 2;
+          visibleHeight = renderedHeight;
+        } else {
+          // recorte arriba/abajo
+          scale = renderedWidth / imgWidth;
+          visibleHeight = imgHeight * scale;
+          offsetY = (renderedHeight - visibleHeight) / 2;
+          visibleWidth = renderedWidth;
+        }
+      } else {
+        // contain, fill, none, etc. (no recorte)
+        scale = renderedWidth / imgWidth;
+        visibleWidth = renderedWidth;
+        visibleHeight = renderedHeight;
+      }
+
+      // Calcular posición y tamaño del hueco transparente en pantalla, solo en el área visible
+      const left = overlayRect.left + offsetX + leftRatio * imgWidth * scale;
+      const top = overlayRect.top + offsetY + topRatio * imgHeight * scale;
+      const width = widthRatio * imgWidth * scale;
+      const height = heightRatio * imgHeight * scale;
+
+      canvas.style.position = 'absolute';
+      canvas.style.left = left + 'px';
+      canvas.style.top = top + 'px';
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+  };
+}
+
+window.addEventListener('load', adaptCanvasToOverlay);
   // Abrir ventana
   let positions = {};
   function closeWindow(id){
@@ -762,6 +923,7 @@ document.querySelectorAll('.window').forEach(makeWindowDraggable);
   // Diccionario de traducciones
   const translations = {
     en: {
+      loading: "Loading",
       // Iconos escritorio
       aboutIcon: "About Me",
       projectsIcon: "Projects",
@@ -803,25 +965,46 @@ document.querySelectorAll('.window').forEach(makeWindowDraggable);
       bachGrade: "Grade: 8.5",
       certTitle: "📜 Courses and Certificates",
       certB1: "B1 Certificate – Cambridge",
+
       // Logros
       achievementsTitle: "Achievements",
       ach1Title: "🏆 Winner – 5th Game Jam Game Scholars Edition",
-      ach1Project: "Project: Deadly Tiles",
+      ach1Project: "Deadly Tiles",
       ach2Title: "🥈 2nd place – Gamejolt Awards 2022",
-      ach2Cat: "Category:Fangame of the Year",
-      ach2Project: "Project:  The Glitched Attraction",
+      category: "Category:",
+      ach2Cat: "Fangame of the Year",
+      ach2Project: "The Glitched Attraction",
       ach3Title: "⭐ Community Impact",
-      views: "views",
+      cuatromillones: "+4 million",
+      dosmillones: "+2 million",
+      views: "views and",
       downloads: "downloads",
-      ach3Project: "Project: The Glitched Attraction",
+      ach3Project: "The Glitched Attraction",
       ach4Title: "🌍 International Recognition",
-      ach4Desc: "Trending in video games in <strong>USA</strong> and multiple countries<br>",
-      ach4Project: "Project: The Glitched Attraction",
+      ach4Desc: "Trending in video games in USA and multiple countries",
+      ach4Project: "The Glitched Attraction",
+      project: "Project:",
+      
       // Habilidades
       skillsTitle: "Skills",
       skillsTypeLabel: "Type:",
       skillsTypeTech: "Technical",
       skillsTypeArt: "Artistic",
+      unity: "Unity",
+      visualStudio: "Visual Studio / VS Code",
+      pycharm: "Pycharm",
+      git: "Git & GitHub",
+      databases: "Databases (SQL/NoSQL)",
+      concurrentProgramming: "Concurrent Programming (C#, threads, semaphores, synchronization)",
+      cuda: "CUDA (GPU programming, basic level)",
+      threeDsMax: "3ds Max",
+      photoshop: "Photoshop",
+      substancePainter: "Substance Painter",
+      cinema4D: "Cinema 4D",
+      blender: "Blender",
+      adobeAnimate: "Adobe Animate",
+
+
       // Redes sociales
       socialTitle: "Social Networks",
       linkedin: "LinkedIn",
@@ -830,7 +1013,8 @@ document.querySelectorAll('.window').forEach(makeWindowDraggable);
       github: "GitHub",
       artstation: "ArtStation",
       youtube: "YouTube",
-      // Ya existentes
+
+      // Sobre mi
       aboutTitle: "About Me",
       greeting: "Hi, I'm Alberto 👋",
       bio1: "I am a programmer with experience in game development, focused on systems and backend programming.",
@@ -849,9 +1033,17 @@ document.querySelectorAll('.window').forEach(makeWindowDraggable);
       interest2: "Multiplayer programming",
       interest3: "Virtual reality",
       interest4: "AI and new technologies",
-      projectsTitle: "Projects"
+      projectsTitle: "Projects",
+
+      //Proyectos 
+      genreLabel: "Genre:",
+      skillsLabel: "Used Skills:",
+      durationLabel: "Duration:",
+      roleLabel: "My Role:",
+      complete: "Complete"
     },
     es: {
+      loading: "Cargando",
       // Iconos escritorio
       aboutIcon: "Sobre mí",
       projectsIcon: "Proyectos",
@@ -893,27 +1085,46 @@ document.querySelectorAll('.window').forEach(makeWindowDraggable);
       bachGrade: "Media: 8.5",
       certTitle: "📜 Cursos y Certificados",
       certB1: "Certificado B1 – Cambridge",
+
       // Logros
       achievementsTitle: "Logros",
       ach1Title: "🏆 Ganador – 5ª Edición Game Jam Game Scholars",
       ach1Project: "Deadly Tiles",
-      project: "Proyecto:",
       ach2Title: "🥈 2º puesto – Gamejolt Awards 2022",
       category: "Categoría:",
       ach2Cat: "Fangame del año",
       ach2Project: "The Glitched Attraction",
       ach3Title: "⭐ Impacto en la comunidad",
-      views: "de visualizaciones",
+      views: "de visualizaciones y",
+      cuatromillones: "+4 millones",
+      dosmillones: "+2 millones",
       downloads: "de descargas",
       ach3Project: "The Glitched Attraction",
       ach4Title: "🌍 Reconocimiento internacional",
-      ach4Desc: "Tendencias de videojuegos en <strong>EE.UU.</strong> y múltiples países<br>",
+      ach4Desc: "Tendencias de videojuegos en EE.UU. y múltiples países",
       ach4Project: "The Glitched Attraction",
+      project: "Proyecto:",
+
       // Habilidades
       skillsTitle: "Habilidades",
       skillsTypeLabel: "Tipo:",
       skillsTypeTech: "Técnico",
       skillsTypeArt: "Artístico",
+      unity: "Unity",
+      visualStudio: "Visual Studio / VS Code",
+      pycharm: "Pycharm",
+      git: "Git & GitHub",
+      databases: "Bases de datos (SQL y NoSQL)",
+      concurrentProgramming: "Programación concurrente (C#, hilos, semáforos, sincronización)",
+      cuda: "CUDA (programación en GPU, nivel básico)",
+      threeDsMax: "3ds Max",
+      photoshop: "Photoshop",
+      substancePainter: "Substance Painter",
+      cinema4D: "Cinema 4D",
+      blender: "Blender",
+      adobeAnimate: "Adobe Animate",
+
+
       // Redes sociales
       socialTitle: "Redes sociales",
       linkedin: "LinkedIn",
@@ -922,7 +1133,8 @@ document.querySelectorAll('.window').forEach(makeWindowDraggable);
       github: "GitHub",
       artstation: "ArtStation",
       youtube: "YouTube",
-      // Ya existentes
+
+      // Sobre mi
       aboutTitle: "Sobre mí",
       greeting: "Hola, soy Alberto 👋",
       bio1: "Soy programador con experiencia en desarrollo de videojuegos, con enfoque en programación de sistemas y backend.",
@@ -941,7 +1153,14 @@ document.querySelectorAll('.window').forEach(makeWindowDraggable);
       interest2: "Programación multiplayer",
       interest3: "Realidad virtual",
       interest4: "IA y nuevas tecnologías",
-      projectsTitle: "Proyectos"
+      projectsTitle: "Proyectos",
+
+      //Proyectos 
+      genreLabel: "Género:",
+      skillsLabel: "Habilidades usadas:",
+      durationLabel: "Duración:",
+      roleLabel: "Mi rol:",
+      complete: "Completar"
     }
   };
 
@@ -1116,6 +1335,8 @@ const projectsData = [
     const container = document.getElementById("projectsList");
     container.innerHTML = "";
 
+    const lang = document.getElementById("langSelect").value || "en";
+    const t = translations[lang];
     projectsData.forEach(project => {
       const card = document.createElement("div");
       card.style.display = "flex";
@@ -1141,14 +1362,14 @@ const projectsData = [
         `;
       }
 
-      // Información
+      // Información traducida
       const infoHTML = `
         <div style="display:flex; flex-direction:column; justify-content:center;">
           <div style="font-weight:bold; font-size:14px;">${project.title}</div>
-          <div style="font-size:12px; color:#555;">Género: ${project.genre}</div>
-          <div style="font-size:12px; color:#555;">Habilidades: ${project.skills}</div>
-          <div style="font-size:12px; color:#555;">Duración: ${project.duration}</div>
-          <div style="font-size:12px; color:#555;">Rol: ${project.role}</div>
+          <div style="font-size:12px; color:#555;"><strong>${t.genreLabel || "Género:"}</strong> ${project.genre}</div>
+          <div style="font-size:12px; color:#555;"><strong>${t.skillsLabel || "Habilidades:"}</strong> ${project.skills}</div>
+          <div style="font-size:12px; color:#555;"><strong>${t.durationLabel || "Duración:"}</strong> ${project.duration}</div>
+          <div style="font-size:12px; color:#555;"><strong>${t.roleLabel || "Rol:"}</strong> ${project.role}</div>
         </div>
       `;
 
@@ -1161,7 +1382,6 @@ const projectsData = [
 
   // Abrir ventana de detalle de proyecto dentro del canvas
   function openProjectDetail(project) {
-    // Crear ventana dinámica si no existe
     let detailWin = document.getElementById(project.id + "_detail");
     if(!detailWin) {
       detailWin = document.createElement("div");
@@ -1180,17 +1400,17 @@ const projectsData = [
           <button class="close" onclick="closeWindow('${detailWin.id}')">×</button>
         </div>
         <div class="content">
-          <div style="margin-bottom:10px;">Género: ${project.genre}</div>
-          <div style="margin-bottom:10px;">Habilidades usadas: ${project.skills}</div>
-          <div style="margin-bottom:10px;">Duración: ${project.duration}</div>
-          <div style="margin-bottom:10px;">Mi rol: ${project.role}</div>
+          <div style="margin-bottom:10px;"><strong>${t("genreLabel")}</strong> ${project.genre}</div>
+          <div style="margin-bottom:10px;"><strong>${t("skillsLabel")}</strong> ${project.skills}</div>
+          <div style="margin-bottom:10px;"><strong>${t("durationLabel")}</strong> ${project.duration}</div>
+          <div style="margin-bottom:10px;"><strong>${t("roleLabel")}</strong> ${project.role}</div>
           <div style="margin-bottom:10px;">
             ${project.type === "image" ? `<img src="${project.src}" style="width:100%; border-radius:6px;">` :
             `<video autoplay loop muted playsinline style="width:100%; border-radius:6px;">
               <source src="${project.src}" type="video/mp4">
             </video>`}
           </div>
-          <p>Aquí irá la descripción más detallada del proyecto.</p>
+          <p>${t("complete")}</p>
         </div>
       `;
       document.querySelector(".canvas").appendChild(detailWin);
@@ -1207,15 +1427,28 @@ const projectsData = [
     document.querySelectorAll("[data-i18n]").forEach(el => {
       const key = el.getAttribute("data-i18n");
       if (translations[lang] && translations[lang][key]) {
-        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.tagName === 'OPTION' || el.tagName === 'BUTTON') {
-          el.value = translations[lang][key];
-          if (el.tagName === 'BUTTON') el.innerText = translations[lang][key];
-        } else {
-          el.innerText = translations[lang][key];
+        switch (el.tagName) {
+          case 'INPUT':
+          case 'TEXTAREA':
+          case 'BUTTON':
+            // Para botones => innerText
+            if (el.tagName === 'BUTTON') {
+              el.innerText = translations[lang][key];
+            } else {
+              // Para inputs/textarea => value (si es tipo botón) o placeholder (si lo quieres aparte)
+              el.value = translations[lang][key];
+            }
+            break;
+          case 'OPTION':
+            el.textContent = translations[lang][key];
+            break;
+          default:
+            el.innerText = translations[lang][key];
         }
       }
     });
-    // Traduce placeholders
+
+    // Traduce placeholders (inputs con placeholder)
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
       const key = el.getAttribute('data-i18n-placeholder');
       if (translations[lang] && translations[lang][key]) {
@@ -1229,7 +1462,8 @@ const projectsData = [
   
   // Cambio dinámico
   document.getElementById("langSelect").addEventListener("change", e => {
-    setLanguage(e.target.value);
+  setLanguage(e.target.value);
+  renderProjectList();
   });
   const helpBtn = document.getElementById("helpBtn");
   const helpTooltip = document.getElementById("helpTooltip");
