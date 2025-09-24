@@ -779,7 +779,6 @@ function adaptCanvasToOverlay() {
       }
     }
     if (maxX <= minX || maxY <= minY) {
-      // Si no hay hueco transparente, canvas ocupa toda la pantalla
       canvas.style.position = 'absolute';
       canvas.style.left = '0px';
       canvas.style.top = '0px';
@@ -820,7 +819,6 @@ function adaptCanvasToOverlay() {
         visibleWidth = renderedWidth;
         visibleHeight = renderedHeight;
       }
-      // Calcular posición y tamaño del hueco transparente en pantalla
       const left = overlayRect.left + offsetX + leftRatio * imgWidth * scale;
       const top = overlayRect.top + offsetY + topRatio * imgHeight * scale;
       const width = widthRatio * imgWidth * scale;
@@ -837,6 +835,13 @@ function adaptCanvasToOverlay() {
     }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
+    // Nuevo: observar cambios en el overlay
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(resizeCanvas);
+      ro.observe(overlay);
+    }
+    // También ajustar si la imagen overlay cambia de src
+    overlay.addEventListener('load', resizeCanvas);
   };
 }
 window.addEventListener('load', adaptCanvasToOverlay);
