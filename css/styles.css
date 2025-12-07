@@ -1,0 +1,311 @@
+/* --- RESET & BASE --- */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: url('../img/fondo.png') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    overflow: hidden; /* Evitar scroll en el body, el scroll va dentro de ventanas */
+    user-select: none;
+}
+
+/* --- PANTALLA DE CARGA --- */
+#loadingScreen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #000;
+    color: white;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s;
+}
+
+.loader {
+    width: 20px; height: 20px;
+    border: 3px solid #fff;
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 10px auto;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* --- ESCRITORIO (Mobile First Grid) --- */
+.desktop {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 45px); /* Restar barra tareas */
+    padding: 20px;
+    overflow-y: auto; /* Scroll si hay muchos iconos */
+}
+
+.icons-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 15px;
+    justify-items: center;
+}
+
+.icon {
+    width: 80px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    transition: transform 0.1s;
+}
+
+.icon:active {
+    transform: scale(0.95);
+}
+
+.icon img {
+    width: 50px;
+    height: 50px;
+    display: block;
+    margin: 0 auto 5px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.icon span {
+    font-size: 13px;
+    line-height: 1.2;
+}
+
+/* --- VENTANAS (Estilo Mobile - Modal) --- */
+.window {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: calc(100% - 45px); /* Menos la barra de tareas */
+    background: #f0f0f0;
+    z-index: 1000;
+    flex-direction: column;
+    animation: slideUp 0.3s ease-out;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.title-bar {
+    background: linear-gradient(90deg, #005A9E, #004275);
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.close-btn {
+    background: #e81123;
+    color: white;
+    border: none;
+    width: 24px; height: 24px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.window-content {
+    padding: 15px;
+    overflow-y: auto; /* Scroll interno */
+    flex-grow: 1;
+    color: #333;
+}
+
+/* --- BARRA DE TAREAS --- */
+.taskbar {
+    position: fixed;
+    bottom: 0; left: 0; width: 100%; height: 45px;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    z-index: 2000;
+    border-top: 1px solid #444;
+}
+
+.start-btn {
+    background: #0078D7;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.start-btn:active { background: #005a9e; }
+
+.taskbar-divider { flex-grow: 1; }
+
+.clock {
+    color: white;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* --- COMPONENTES INTERNOS --- */
+/* Proyectos */
+.project-card {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.project-card img, .project-card video {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* Perfil */
+.profile-layout {
+    display: flex;
+    flex-direction: column; /* Columna en móvil */
+    gap: 15px;
+}
+.profile-img {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* Habilidades */
+.skills-list > div {
+    margin-bottom: 8px;
+}
+.skill-bar-bg {
+    background: #ddd; height: 10px; border-radius: 5px; overflow: hidden;
+}
+.skill-bar-fill {
+    height: 100%; background: #0078D7;
+}
+
+/* Redes */
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.social-links a {
+    background: white;
+    padding: 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+/* Selector Idioma */
+.lang-selector {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: rgba(0,0,0,0.5);
+    padding: 5px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+select { background: #333; color: white; border: none; padding: 2px; }
+
+/* Contacto Form */
+.contact-form { display: flex; flex-direction: column; gap: 10px; }
+.contact-form input, .contact-form textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.btn-primary {
+    background: #0078D7; color: white; border: none; padding: 10px;
+    border-radius: 4px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block;
+}
+
+/* --- MEDIA QUERIES (DESKTOP) --- */
+@media (min-width: 768px) {
+    /* Ajustes generales Escritorio */
+    .icons-container {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        height: 100%;
+        align-content: flex-start; /* Columnas hacia la derecha */
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .icon {
+        width: 90px;
+        margin-bottom: 15px;
+    }
+
+    /* Ventanas Flotantes */
+    .window {
+        position: absolute; /* Libre movimiento */
+        width: 600px;
+        height: auto;
+        max-height: 80vh;
+        top: 10%; left: 20%;
+        border-radius: 8px;
+        border: 1px solid #005A9E;
+        animation: fadeIn 0.2s ease-out;
+        resize: both;
+        overflow: hidden; /* El contenido hace scroll, la ventana no */
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    .title-bar {
+        cursor: grab; /* Indicador de arrastre */
+    }
+    .title-bar:active { cursor: grabbing; }
+
+    /* Layouts internos escritorio */
+    .profile-layout {
+        flex-direction: row;
+    }
+    .project-card {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    .project-card img, .project-card video {
+        width: 150px;
+        height: 100px;
+    }
+    .social-links {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .programs-grid {
+        display: flex;
+        gap: 20px;
+    }
+    .program-section { flex: 1; }
+}

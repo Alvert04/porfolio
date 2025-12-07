@@ -1,1544 +1,258 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Mi Portfolio - Escritorio</title>
-<style>
-@media (max-width: 600px) {
-  body {
-    position: relative;
-    overflow: hidden;
-  }
-  .canvas {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    max-width: 100vw !important;
-    max-height: 100vh !important;
-    min-width: 100vw !important;
-    min-height: 100vh !important;
-    border-radius: 0 !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
-  }
-  #overlayImage {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    border-radius: 0 !important;
-    object-fit: cover !important;
-    z-index: 6000 !important;
-    pointer-events: none !important;
-  }
-  .desktop {
-    position: relative !important;
-    width: 100% !important;
-    height: 100% !important;
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 18px !important;
-  }
-  .desktop .icon {
-    position: relative !important;
-    width: 100px !important;
-    height: 100px !important;
-    font-size: 16px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 6px !important;
-    touch-action: manipulation !important;
-  }
-  .icon img {
-    width: 80px !important;
-    height: 80px !important;
-    margin-bottom: 4px !important;
-  }
-  .icon span {
-    font-size: 15px !important;
-    text-shadow: 1px 1px 2px black !important;
-  }
-}
-  body {
-    background: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  }
-  #overlayImage {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;   /* Se adapta al ancho del canvas */
-    height: 100%;  /* Se adapta al alto del canvas */
-    pointer-events: none; /* Permite que hagas clic en iconos y ventanas debajo */
-    object-fit: cover;    /* Ajusta la imagen manteniendo proporción */
-    z-index: 6000;           /* Debe estar por encima del canvas pero debajo de ventanas si quieres */
-  }
-
-  /* CANVAS central */
-  .canvas {
-  width: 90%;
-  max-width: 1200px;
-  height: 80%;
-  background: url('img/fondo.png') no-repeat center center;
-  background-size: cover;
-  border: 1px solid #4a607d;
-  border-radius: 10px;
-  box-shadow: 0 0 25px rgba(0,0,0,0.6);
-  position: relative;
-  overflow: hidden;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  }
-  /* Animación de puntos */
-  @keyframes bounce {
-    0%, 80%, 100% { transform: scale(0.8); opacity:0.5; }
-    40% { transform: scale(1.3); opacity:1; }
-  }
-
-  .desktop {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-
-  .desktop .icon {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    transition: transform 0.2s, filter 0.2s;
-  }
-
-  .icon {
-    width: 80px;
-    text-align: center;
-    color: white;
-    cursor: pointer;
-    user-select: none;
-  }
-  .icon:hover {
-    transform: translate(-50%, -50%) scale(1.15);
-    filter: brightness(1.2);
-  }
-  .icon img {
-    width: 64px;
-    height: 64px;
-    margin-bottom: 6px;
-  }
-  .icon span {
-    font-size: 13px;
-    text-shadow: 1px 1px 2px black;
-  }
-
-  /* Ventanas estilo Win7 */
-  .window {
-    position: absolute;
-    top: 80px;
-    left: 120px;
-    background: #f2f4f8;
-    border: 1px solid #8ba8d8;
-    border-radius: 6px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    display: none;
-    flex-direction: column;
-    min-width: 280px;
-    max-width: 600px;
-    animation: fadeIn 0.25s ease;
-    resize: both;
-    overflow: auto;
-  }
-  @keyframes fadeIn {
-    from {opacity:0; transform:scale(0.95);}
-    to {opacity:1; transform:scale(1);}
-  }
-  .window .content h4 {
-     margin: 10px 0 5px 0;
-     color: #2d5d90;
-   }
-   
-   .window .content ul {
-     margin: 0 0 10px 0;
-     padding-left: 18px;
-   }
-   
-   .window .content p {
-     margin-bottom: 10px;
-   }
-   
-   .achievement {
-      display: flex;
-      align-items: center;
-      background: #fff;
-      border-radius: 8px;
-      padding: 10px;
-      margin: 10px 0;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-      transition: transform 0.2s;
-    }
-    .achievement:hover {
-      transform: scale(1.02);
-    }
-    .ach-thumb {
-      width: 60px;
-      height: 60px;
-      border-radius: 6px;
-      margin-right: 12px;
-      object-fit: cover;
-    }
-    .ach-info h4 {
-      margin: 0;
-      font-size: 15px;
-      color: #2a2a2a;
-    }
-    .ach-info p {
-      margin: 4px 0 0;
-      font-size: 13px;
-      color: #555;
-    }
-    /* Contenedor de lista de proyectos con scroll */
-    #projectsList {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      max-height: 500px; /* Ajusta según tu preferencia */
-      max-width: 800px; /* Antes estaba 600px, ahora más ancha */
-      overflow-y: auto;  /* Scroll vertical */
-      padding-right: 5px; /* Para que no tape la barra de scroll */
-    }
-    .programs {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .programs-section {
-      flex: 1 1 45%;
-      background: #fff;
-      border-radius: 8px;
-      padding: 12px 15px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    }
-
-    .programs-section h4 {
-      margin: 0 0 10px;
-      font-size: 15px;
-      color: #2d5d90;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 4px;
-    }
-
-    .programs-section ul {
-      margin: 0;
-      padding-left: 20px;
-    }
-
-    .programs-section ul li {
-      margin: 5px 0;
-      font-size: 13px;
-      list-style: "✔ ";
-    }
-
-  .title-bar {
-    background: linear-gradient(#3a6ea5, #2d5d90);
-    color: white;
-    padding: 6px 10px;
-    font-weight: bold;
-    border-radius: 6px 6px 0 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: move;
-  }
-  .title-bar .close {
-    background: #e81123;
-    border: none;
-    width: 20px;
-    height: 20px;
-    color: white;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 18px;
-    text-align: center;
-  }
-
-  .content {
-    padding: 15px;
-    color: #222;
-    line-height: 1.5;
-  }
-
-  /* Perfil sobre mí */
-  .profile {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-  }
-  /* Barra de tareas dentro del canvas */
-.canvas .taskbar {
-  /* position: absolute; */
-  /* bottom: 0; */
-  /* left: 0; */
-  width: 100%;
-  height: 40px;
-  background: rgba(56, 56, 56, 0.9);
-  display: flex;
-  align-items: center;
-  padding: 0 15px;
-  box-shadow: 0 -3px 10px rgba(0,0,0,0.5);
-  z-index: 500;
-  gap: 10px;
-}
-
-/* Botón de ayuda */
-.canvas .taskbar button {
-  background: #979797;
-  color: #ebebeb;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: transform 0.2s, background 0.2s;
-}
-
-.canvas .taskbar button:hover {
-  background: #b6b6b6;
-  transform: scale(1.1);
-}
-
-/* Tooltip relativo al canvas */
-.canvas .tooltip {
-  position: absolute;
-  bottom: 60px;
-  left: 20px;
-  background: rgba(34, 34, 34, 0.8);
-  color: rgb(97, 97, 97);
-  padding: 10px 15px;
-  border-radius: 6px;
-  font-size: 14px;
-  display: none;
-  max-width: 250px;
-  z-index: 600;
-}
-  .profile img {
-    width: 120px;
-    height: 120px;
-    border-radius: 8px;
-    object-fit: cover;
-    border: 2px solid #ccc;
-  }
-  .profile-info h3 {
-    margin-top: 0;
-  }
-
-  /* Formulario de contacto */
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  form input, form textarea {
-    padding: 8px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    font-size: 14px;
-    width: 100%;
-  }
-  form button {
-    background: #3a6ea5;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  form button:hover {
-    background: #2d5d90;
-  }
-
-
-  /* Ventanas sobre móviles */
-
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alberto's Portfolio OS</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-<img src="img/Monitor.png" id="overlayImage" alt="Overlay">
 
-<div class="canvas">
-  <!-- Pantalla de carga -->
-  <div id="loadingScreen" style="
-    position:absolute;
-    top:0; left:0;
-    width:100%; height:100%;
-    background:#020B56; 
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:2000;
-    flex-direction:column;
-    color:white;
-    font-family:sans-serif;
-    font-size:24px;
-    transition: opacity 1s ease;
-  ">
-    <div class="loading-text" data-i18n="loading">Cargando</div>
-    <div class="loading-dots" style="display:flex; gap:5px; margin-top:10px;">
-      <div style="width:8px; height:8px; border-radius:50%; background:white; animation: bounce 1s infinite;"></div>
-      <div style="width:8px; height:8px; border-radius:50%; background:white; animation: bounce 1s infinite 0.2s;"></div>
-      <div style="width:8px; height:8px; border-radius:50%; background:white; animation: bounce 1s infinite 0.4s;"></div>
-    </div>
-  </div>
-  
-  <div class="desktop" id="desktopIcons">
-    <div class="icon" onclick="openWindow('about')">
-      <img src="img/AboutMe.png">
-      <span data-i18n="aboutIcon">Sobre mí</span>
-    </div>
-    <div class="icon" onclick="openWindow('projects')">
-      <img src="img/Proyectos.png">
-      <span data-i18n="projectsIcon">Proyectos</span>
-    </div>
-    <div class="icon" onclick="openWindow('skills')">
-      <img src="img/Skills.png">
-      <span data-i18n="skillsIcon">Habilidades</span>
-    </div>
-    <div class="icon" onclick="openWindow('programs')">
-      <img src="img/Programs.png" alt="Programas">
-      <span data-i18n="programsIcon">Programas</span>
+    <div id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-text" data-i18n="loading">Cargando Sistema...</div>
+            <div class="loader"></div>
+        </div>
     </div>
 
-    <div class="icon" onclick="openWindow('education')">
-      <img src="img/Education.png" alt="Educación">
-      <span data-i18n="educationIcon">Educación</span>
-    </div>
-
-    <div class="icon" onclick="openWindow('achievements')">
-      <img src="img/Achievements.png" alt="Logros">
-      <span data-i18n="achievementsIcon">Logros</span>
-    </div>
-    <div class="icon" onclick="openWindow('social')">
-      <img src="img/Redes.png">
-      <span data-i18n="socialIcon">Redes</span>
-    </div>
-    <div class="icon" onclick="openWindow('contact')">
-      <img src="img/Contact.png">
-      <span data-i18n="contactIcon">Contáctame</span>
-    </div>
-    <div class="icon" onclick="openWindow('cv')">
-      <img src="img/CV.png" alt="Currículum">
-      <span data-i18n="cvIcon">Currículum</span>
-    </div>
-  </div>
-
-    <!-- Selector de idioma -->
-    <div style="position: absolute; top: 10px; right: 20px; z-index: 1000;">
-      <label for="langSelect" style="color:white; font-weight:bold;">🌐</label>
-      <select id="langSelect">
-        <option value="en" selected>English</option>
-        <option value="es">Español</option>
-      </select>
-    </div>
-
-    <!-- Ventana Sobre mí -->
-    <div class="window" id="about">
-      <div class="title-bar">
-        <span data-i18n="aboutTitle">About Me</span>
-        <button class="close" onclick="closeWindow('about')">×</button>
-      </div>
-      <div class="content" style="display:flex; gap:20px; align-items:flex-start;">
-
-      <!-- Lateral izquierdo -->
-      <div style="display:flex; flex-direction:column; align-items:center; min-width:150px;">
-        <img src="img/perfil.jpeg" alt="Foto de perfil"
-            style="width:120px; height:120px; border-radius:8px; object-fit:cover; box-shadow:0 3px 6px rgba(0,0,0,0.3);">
+    <main class="desktop">
         
-        <!-- Sección lateral -->
-        <div style="margin-top:15px; text-align:center; font-size:14px;">
-          <h4 data-i18n="languagesTitle">Languages</h4>
-          <ul style="list-style:disc; padding-left:20px; text-align:left;">
-            <li data-i18n="lang1">Spanish (native)</li>
-            <li data-i18n="lang2">English (fluent)</li>
-          </ul>
-      
-          <h4 data-i18n="interestsTitle" style="margin-top:10px;">Interests</h4>
-          <ul style="list-style:disc; padding-left:20px; text-align:left;">
-            <li data-i18n="interest1">Indie games</li>
-            <li data-i18n="interest2">Multiplayer programming</li>
-            <li data-i18n="interest3">Virtual reality</li>
-            <li data-i18n="interest4">AI and new technologies</li>
-          </ul>
-        </div>
-      </div>
-      
-      <!-- Contenido principal -->
-      <div style="flex:1;">
-        <h3 data-i18n="greeting">Hi, I'm Alberto 👋</h3>
-      
-        <h4 data-i18n="experienceTitle">Experience</h4>
-        <ul>
-          <li data-i18n="bio1">I am a programmer with experience in game development, focused on systems and backend programming.</li>
-          <li data-i18n="bio2">Since 2018 I have participated in indie projects, working with languages like C#, Python, and JavaScript.</li>
-          <li data-i18n="bio2extra">I have experience in multiplayer programming in C# and VR development.</li>
-        </ul>
-      
-        <h4 data-i18n="educationTitle">Education</h4>
-        <p data-i18n="bio3">I graduated from URJC in Video Game Design and Development.</p>
-      
-        <h4 data-i18n="passionTitle">Passion</h4>
-        <p data-i18n="bio4">I am passionate about creating immersive worlds and learning new technologies to improve every project.</p>
-      </div>
-    </div>
-    </div>
- 
-    <!-- Ventana Contacto -->
-    <div class="window" id="contact">
-      <div class="title-bar">
-        <span data-i18n="contactTitle">Contáctame</span>
-        <button class="close" onclick="closeWindow('contact')">×</button>
-      </div>
-      <div class="content">
-        <p data-i18n="contactMsg">Envíame un mensaje directamente a mi correo:</p>
-        <!-- Opción rápida: mailto -->
-        <form action="mailto:albertopm6b@gmail.com" method="post" enctype="text/plain">
-          <input type="text" name="nombre" placeholder="Tu nombre" data-i18n-placeholder="namePlaceholder" required>
-          <input type="email" name="email" placeholder="Tu correo" data-i18n-placeholder="emailPlaceholder" required>
-          <textarea name="mensaje" rows="5" placeholder="Tu mensaje..." data-i18n-placeholder="msgPlaceholder" required></textarea>
-          <button type="submit" data-i18n="sendBtn">Enviar</button>
-        </form>
-        <p style="font-size:12px;color:#555;margin-top:8px;" data-i18n="contactNote">
-          ⚠ Nota: Este formulario abrirá tu cliente de correo.  
-          Para envío directo sin cliente, recomiendo integrar <strong>EmailJS</strong>.
-        </p>
-      </div>
-    </div>
-
-    <!-- Barra de tareas dentro del canvas -->
-    <div class="taskbar">
-    <button id="helpBtn" data-i18n="helpBtn">Ayuda</button>
-      <div id="taskbarClock" class="clock"></div>
-    </div>
-
-    <!-- Tooltip de ayuda dentro del canvas -->
-    <div id="helpTooltip" class="tooltip">
-    <span data-i18n="helpTooltip">Haz clic en los iconos del escritorio para abrir las ventanas con tu información, proyectos, habilidades y redes sociales.</span>
-    </div>
-
-    <!-- Ventana Currículum -->
-    <div class="window" id="cv">
-      <div class="title-bar">
-        <span data-i18n="cvTitle"></span>
-        <button class="close" onclick="closeWindow('cv')">×</button>
-      </div>
-      <div class="content">
-        <p data-i18n="cvMsg"></p>
-        <a href="pdf/CV.pdf" download data-i18n="cvDownload"></a>
-      </div>
-    </div>
-
-    <!-- Ventana Programas -->
-    <div class="window" id="programs">
-      <div class="title-bar">
-        <span data-i18n="programsTitle">Programas y Competencias</span>
-        <button class="close" onclick="closeWindow('programs')">×</button>
-      </div>
-      <div class="content programs">
-
-        <!-- Sección Técnica -->
-        <div class="programs-section">
-          <h4 data-i18n="techSkills">⚙️ Técnicos</h4>
-          <ul>
-            <li data-i18n="unity">Unity</li>
-            <li data-i18n="visualStudio">Visual Studio / VS Code</li>
-            <li data-i18n="pycharm">Pycharm</li>
-            <li data-i18n="git">Git & GitHub</li>
-            <li data-i18n="databases">Bases de datos (SQL y NoSQL)</li>
-            <li data-i18n="concurrentProgramming">Programación concurrente (C#, hilos, semáforos, sincronización)</li>
-            <li data-i18n="cuda">CUDA (programación en GPU, nivel básico)</li>
-          </ul>
+        <div class="icons-container" id="desktopIcons">
+            <div class="icon" onclick="openWindow('about')">
+                <img src="img/AboutMe.png" alt="Sobre mí" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3069/3069172.png'">
+                <span data-i18n="aboutIcon">Sobre mí</span>
+            </div>
+            <div class="icon" onclick="openWindow('projects')">
+                <img src="img/Proyectos.png" alt="Proyectos" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1087/1087815.png'">
+                <span data-i18n="projectsIcon">Proyectos</span>
+            </div>
+            <div class="icon" onclick="openWindow('skills')">
+                <img src="img/Skills.png" alt="Habilidades" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3093/3093772.png'">
+                <span data-i18n="skillsIcon">Habilidades</span>
+            </div>
+            <div class="icon" onclick="openWindow('programs')">
+                <img src="img/Programs.png" alt="Programas" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2620/2620958.png'">
+                <span data-i18n="programsIcon">Programas</span>
+            </div>
+            <div class="icon" onclick="openWindow('education')">
+                <img src="img/Education.png" alt="Educación" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2232/2232688.png'">
+                <span data-i18n="educationIcon">Educación</span>
+            </div>
+            <div class="icon" onclick="openWindow('achievements')">
+                <img src="img/Achievements.png" alt="Logros" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3112/3112946.png'">
+                <span data-i18n="achievementsIcon">Logros</span>
+            </div>
+            <div class="icon" onclick="openWindow('social')">
+                <img src="img/Redes.png" alt="Redes" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3059/3059486.png'">
+                <span data-i18n="socialIcon">Redes</span>
+            </div>
+            <div class="icon" onclick="openWindow('contact')">
+                <img src="img/Contact.png" alt="Contacto" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2504/2504886.png'">
+                <span data-i18n="contactIcon">Contacto</span>
+            </div>
+            <div class="icon" onclick="openWindow('cv')">
+                <img src="img/CV.png" alt="CV" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135679.png'">
+                <span data-i18n="cvIcon">CV</span>
+            </div>
         </div>
 
-        <!-- Sección Artística -->
-        <div class="programs-section">
-          <h4 data-i18n="artSkills">🎨 Artísticos</h4>
-          <ul>
-            <li data-i18n="threeDsMax">3ds Max</li>
-            <li data-i18n="photoshop">Photoshop</li>
-            <li data-i18n="substancePainter">Substance Painter</li>
-            <li data-i18n="cinema4D">Cinema 4D</li>
-            <li data-i18n="blender">Blender</li>
-            <li data-i18n="adobeAnimate">Adobe Animate</li>
-          </ul>
+        <div class="lang-selector">
+            <span class="lang-icon">🌐</span>
+            <select id="langSelect">
+                <option value="en">English</option>
+                <option value="es" selected>Español</option>
+            </select>
         </div>
 
-      </div>
-  </div>
-
-  <!-- Ventana Educación -->
-  <div class="window" id="education">
-    <div class="title-bar">
-      <span data-i18n="educationTitleWin"></span>
-      <button class="close" onclick="closeWindow('education')">×</button>
-    </div>
-    <div class="content education">
-
-      <div class="edu-item">
-        <h4 data-i18n="degreeTitle"></h4>
-        <ul>
-          <li data-i18n="degreeSchool"></li>
-          <li data-i18n="degreePlace"></li>
-          <li data-i18n="degreeGrade"></li>
-        </ul>
-      </div>
-
-      <div class="edu-item">
-        <h4 data-i18n="bachTitle"></h4>
-        <ul>
-          <li data-i18n="bachSchool"></li>
-          <li data-i18n="bachPlace"></li>
-          <li data-i18n="bachGrade"></li>
-        </ul>
-      </div>
-
-      <div class="edu-item">
-        <h4 data-i18n="certTitle"></h4>
-        <ul>
-          <li data-i18n="certB1"></li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- Ventana Logros -->
-  <div class="window" id="achievements">
-    <div class="title-bar">
-      <span data-i18n="achievementsTitle"></span>
-      <button class="close" onclick="closeWindow('achievements')">×</button>
-    </div>
-    <div class="content achievements">
-
-      <div class="achievement">
-        <img src="img/Proyectos/Deadly.png" alt="Deadly Tiles" class="ach-thumb">
-        <div class="ach-info">
-          <h4 data-i18n="ach1Title"></h4>
-          <p>
-            <strong data-i18n="project"></strong> <span data-i18n="ach1Project"></span>
-          </p>
+        <div class="window" id="about">
+            <div class="title-bar">
+                <span data-i18n="aboutTitle">About Me</span>
+                <button class="close-btn" onclick="closeWindow('about')">×</button>
+            </div>
+            <div class="window-content profile-layout">
+                <div class="profile-sidebar">
+                    <img src="img/perfil.jpeg" alt="Avatar" class="profile-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4140/4140048.png'">
+                    <div class="sidebar-info">
+                        <h4 data-i18n="languagesTitle">Languages</h4>
+                        <ul>
+                            <li data-i18n="lang1">Spanish</li>
+                            <li data-i18n="lang2">English</li>
+                        </ul>
+                        <h4 data-i18n="interestsTitle">Interests</h4>
+                        <ul>
+                            <li data-i18n="interest1">Game Development</li>
+                            <li data-i18n="interest2">Data Bases</li>
+                            <li data-i18n="interest3">Graphics and 3D</li>
+                            <li data-i18n="interest4">AI and new technologies</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="profile-main">
+                    <h3 data-i18n="greeting">Hi, I'm Alberto</h3>
+                    <h4 data-i18n="experienceTitle">Experience</h4>
+                    <ul>
+                        <li data-i18n="bio1">I am a programmer with experience in game development, focused on systems and backend programming.</li>
+                        <li data-i18n="bio2">Since 2018 I have participated in indie projects, working with languages like C#, Python, and JavaScript.</li>
+                        <li data-i18n="bio2extra">I have experience in multiplayer programming in C# and VR development, and I also have basic knowledge of multithreaded programming, databases, and web and Android development.</li>
+                    </ul>
+                    <h4 data-i18n="educationTitle">Education</h4>
+                    <p data-i18n="bio3">I graduated from URJC in Video Game Design and Development.</p>
+                    <ul>
+                        <li data-i18n="note">My average grade is <b>7</b></li>
+                    </ul>
+                    <p data-i18n="bio4">I completed a technical baccalaureate in Antequera, Málaga.</p>
+                    <ul>
+                        <li data-i18n="note">My average grade is <b>8.5</b></li>
+                    </ul>
+                    <h4 data-i18n="passionTitle">Passion</h4>
+                    <p data-i18n="bio5">I am passionate about creating immersive worlds and learning new technologies to improve every project.</p>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <div class="achievement">
-        <img src="img/Proyectos/GlitchedA.jpg" alt="The Glitched Attraction" class="ach-thumb">
-        <div class="ach-info">
-          <h4 data-i18n="ach2Title"></h4>
-          <p>
-            <strong data-i18n="category"></strong> <span data-i18n="ach2Cat"></span><br>
-            <strong data-i18n="project"></strong> <span data-i18n="ach2Project"></span>
-          </p>
+        <div class="window" id="projects">
+            <div class="title-bar">
+                <span data-i18n="projectsTitle">Projects</span>
+                <button class="close-btn" onclick="closeWindow('projects')">×</button>
+            </div>
+            <div class="window-content scrollable" id="projectsList">
+                </div>
         </div>
-      </div>
 
-      <div class="achievement">
-        <img src="img/Proyectos/GlitchedA.jpg" alt="The Glitched Attraction" class="ach-thumb">
-        <div class="ach-info">
-          <h4 data-i18n="ach3Title"></h4>
-          <p>
-            <strong data-i18n="cuatromillones">+4 millones</strong> <span data-i18n="views"></span>  
-            <strong data-i18n="dosmillones">+2 millones</strong> <span data-i18n="downloads"></span><br>
-            <strong data-i18n="project"></strong> <span data-i18n="ach2Project"></span><br>
-          </p>
+        <div class="window" id="skills">
+            <div class="title-bar">
+                <span data-i18n="skillsTitle">Habilidades</span>
+                <button class="close-btn" onclick="closeWindow('skills')">×</button>
+            </div>
+            <div class="window-content">
+                <div class="controls">
+                    <label data-i18n="skillsTypeLabel">Tipo:</label>
+                    <select id="skillsType">
+                        <option value="technical" data-i18n="skillsTypeTech">Técnico</option>
+                        <option value="artistic" data-i18n="skillsTypeArt">Artístico</option>
+                    </select>
+                </div>
+                <div id="skillsContainer" class="skills-list"></div>
+            </div>
         </div>
-      </div>
 
-      <div class="achievement">
-        <img src="img/Proyectos/GlitchedA.jpg" alt="The Glitched Attraction" class="ach-thumb">
-        <div class="ach-info">
-          <h4 data-i18n="ach4Title"></h4>
-          <p data-i18n="ach4Desc"></p>
-          <p><strong data-i18n="project"></strong> <span data-i18n="ach4Project"></span><br>
+        <div class="window" id="contact">
+            <div class="title-bar">
+                <span data-i18n="contactTitle">Contacto</span>
+                <button class="close-btn" onclick="closeWindow('contact')">×</button>
+            </div>
+            <div class="window-content">
+                <p data-i18n="contactMsg">Envíame un mensaje:</p>
+                <form action="mailto:albertopm6b@gmail.com" method="post" enctype="text/plain" class="contact-form">
+                    <input type="text" name="nombre" placeholder="Nombre" data-i18n-placeholder="namePlaceholder" required>
+                    <input type="email" name="email" placeholder="Email" data-i18n-placeholder="emailPlaceholder" required>
+                    <textarea name="mensaje" rows="4" placeholder="Mensaje" data-i18n-placeholder="msgPlaceholder" required></textarea>
+                    <button type="submit" class="btn-primary" data-i18n="sendBtn">Enviar</button>
+                </form>
+            </div>
         </div>
-      </div>
 
-    </div>
-  </div>
-  <!-- Ventana Proyectos -->
-    <div class="window" id="projects">
-      <div class="title-bar">
-        <span data-i18n="projectsTitle">Proyectos</span>
-        <button class="close" onclick="closeWindow('projects')">×</button>
-      </div>
-      <div class="content" id="projectsList" style="display:flex; flex-direction:column; gap:15px;">
-        <!-- Las tarjetas de proyecto se generan dinámicamente -->
-      </div>
-    </div>
+        <div class="window" id="programs">
+            <div class="title-bar">
+                <span data-i18n="programsTitle">Programas</span>
+                <button class="close-btn" onclick="closeWindow('programs')">×</button>
+            </div>
+            <div class="window-content programs-grid">
+                <div class="program-section">
+                    <h4 data-i18n="techSkills">⚙️ Técnicos</h4>
+                    <ul class="check-list">
+                        <li data-i18n="unity">Unity</li>
+                        <li data-i18n="visualStudio">Visual Studio</li>
+                        <li data-i18n="git">Git</li>
+                    </ul>
+                </div>
+                <div class="program-section">
+                    <h4 data-i18n="artSkills">🎨 Artísticos</h4>
+                    <ul class="check-list">
+                        <li data-i18n="blender">Blender</li>
+                        <li data-i18n="photoshop">Photoshop</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-  <!-- Ventana Habilidades -->
-  <div class="window" id="skills">
-    <div class="title-bar">
-      <span data-i18n="skillsTitle">Habilidades</span>
-      <button class="close" onclick="closeWindow('skills')">×</button>
-    </div>
-    <div class="content">
-      <div style="margin-bottom: 10px;">
-        <label for="skillsType"><strong data-i18n="skillsTypeLabel">Tipo:</strong></label>
-        <select id="skillsType">
-          <option value="technical" data-i18n="skillsTypeTech" selected>Técnico</option>
-          <option value="artistic" data-i18n="skillsTypeArt">Artístico</option>
-        </select>
-      </div>
-      <div id="skillsContainer"></div>
-    </div>
-  </div>
+         <div class="window" id="education">
+            <div class="title-bar">
+                <span data-i18n="educationTitleWin">Educación</span>
+                <button class="close-btn" onclick="closeWindow('education')">×</button>
+            </div>
+            <div class="window-content">
+                <div class="edu-item">
+                    <h4 data-i18n="degreeTitle">Grado Videojuegos</h4>
+                    <ul>
+                         <li data-i18n="degreeSchool">URJC</li>
+                         <li data-i18n="degreeGrade">Nota: 7.7</li>
+                    </ul>
+                </div>
+                <hr>
+                <div class="edu-item">
+                    <h4 data-i18n="certB1">Inglés B1</h4>
+                </div>
+            </div>
+        </div>
 
-  <!-- Ventana Redes sociales -->
-    <div class="window" id="social">
-      <div class="title-bar">
-        <span data-i18n="socialTitle">Redes sociales</span>
-        <button class="close" onclick="closeWindow('social')">×</button>
-      </div>
-      <div class="content" style="display:flex; flex-direction:column; gap:10px;">
+        <div class="window" id="achievements">
+            <div class="title-bar">
+                <span data-i18n="achievementsTitle">Logros</span>
+                <button class="close-btn" onclick="closeWindow('achievements')">×</button>
+            </div>
+            <div class="window-content" id="achievementsList">
+               <div class="achievement-card">
+                   <div class="ach-icon">🏆</div>
+                   <div class="ach-text">
+                       <h4 data-i18n="ach1Title">Ganador Game Jam</h4>
+                       <p data-i18n="ach1Project">Deadly Tiles</p>
+                   </div>
+               </div>
+               <div class="achievement-card">
+                   <div class="ach-icon">🥈</div>
+                   <div class="ach-text">
+                       <h4 data-i18n="ach2Title">2º Puesto Gamejolt</h4>
+                       <p data-i18n="ach2Project">The Glitched Attraction</p>
+                   </div>
+               </div>
+            </div>
+        </div>
+
+        <div class="window" id="social">
+            <div class="title-bar">
+                <span data-i18n="socialTitle">Redes Sociales</span>
+                <button class="close-btn" onclick="closeWindow('social')">×</button>
+            </div>
+            <div class="window-content social-links">
+                <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+                <a href="https://github.com" target="_blank">GitHub</a>
+                <a href="https://itch.io" target="_blank">Itch.io</a>
+                <a href="https://artstation.com" target="_blank">ArtStation</a>
+            </div>
+        </div>
         
-        <a href="https://www.linkedin.com/in/alberto-palomino-monta%C3%B1ez/" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
-          <img src="https://cdn-icons-png.flaticon.com/64/174/174857.png" alt="LinkedIn" style="width:24px; height:24px;">
-          <span>LinkedIn</span>
-        </a>
-        <a href="https://alvert04games.itch.io/" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
-          <img src="https://static.itch.io/images/itchio-textless-black.svg" alt="Itch.io" style="width:24px; height:24px;">
-          <span>Itch.io</span>
-        </a>
-        <a href="https://gamejolt.com/@Alvert04Games" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
-          <img src="https://m.gjcdn.net/fireside-post-image/600/24010743-ll-sfbhunum-v4.webp" alt="Gamejolt" style="width:24px; height:24px;">
-          <span>Gamejolt</span>
-        </a>
-        <a href="https://github.com/Alvert04" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
-          <img src="https://cdn-icons-png.flaticon.com/64/25/25231.png" alt="GitHub" style="width:24px; height:24px;">
-          <span>GitHub</span>
-        </a>
-        <a href="https://www.artstation.com/alvert04" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
-          <img src="https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/27_Artstation_logo_logos-512.png" alt="ArtStation" style="width:24px; height:24px;">
-          <span>ArtStation</span>
-        </a>
-        <a href="https://www.youtube.com/@powerlinestudios" target="_blank" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#222;">
-          <img src="https://cdn-icons-png.flaticon.com/64/1384/1384060.png" alt="YouTube" style="width:24px; height:24px;">
-          <span>YouTube</span>
-        </a>
-        
-      </div>
-    </div>
-</div>
-
-<script>
-// Adaptar canvas al hueco transparente de la imagen de overlay
-function adaptCanvasToOverlay() {
-  const overlay = document.getElementById('overlayImage');
-  const canvas = document.querySelector('.canvas');
-  if (!overlay || !canvas) return;
-
-  // Crear un canvas auxiliar para analizar la transparencia
-  const img = new Image();
-  img.src = overlay.src;
-  img.onload = function() {
-    const aux = document.createElement('canvas');
-    aux.width = img.naturalWidth;
-    aux.height = img.naturalHeight;
-    const ctx = aux.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-    const imageData = ctx.getImageData(0, 0, aux.width, aux.height);
-    let minX = aux.width, minY = aux.height, maxX = 0, maxY = 0;
-    for (let y = 0; y < aux.height; y++) {
-      for (let x = 0; x < aux.width; x++) {
-        const alpha = imageData.data[(y * aux.width + x) * 4 + 3];
-        if (alpha < 10) {
-          if (x < minX) minX = x;
-          if (x > maxX) maxX = x;
-          if (y < minY) minY = y;
-          if (y > maxY) maxY = y;
-        }
-      }
-    }
-    if (maxX <= minX || maxY <= minY) {
-      canvas.style.position = 'absolute';
-      canvas.style.left = '0px';
-      canvas.style.top = '0px';
-      canvas.style.width = '100vw';
-      canvas.style.height = '100vh';
-      return;
-    }
-    const leftRatio = minX / aux.width;
-    const topRatio = minY / aux.height;
-    const widthRatio = (maxX - minX) / aux.width;
-    const heightRatio = (maxY - minY) / aux.height;
-    function resizeCanvas() {
-      const overlayRect = overlay.getBoundingClientRect();
-      let imgWidth = overlay.naturalWidth;
-      let imgHeight = overlay.naturalHeight;
-      let renderedWidth = overlayRect.width;
-      let renderedHeight = overlayRect.height;
-      const imgAspect = imgWidth / imgHeight;
-      const renderedAspect = renderedWidth / renderedHeight;
-      let offsetX = 0, offsetY = 0;
-      let scale = 1;
-      let visibleWidth = renderedWidth;
-      let visibleHeight = renderedHeight;
-      if (window.getComputedStyle(overlay).objectFit === 'cover') {
-        if (renderedAspect > imgAspect) {
-          scale = renderedHeight / imgHeight;
-          visibleWidth = imgWidth * scale;
-          offsetX = (renderedWidth - visibleWidth) / 2;
-          visibleHeight = renderedHeight;
-        } else {
-          scale = renderedWidth / imgWidth;
-          visibleHeight = imgHeight * scale;
-          offsetY = (renderedHeight - visibleHeight) / 2;
-          visibleWidth = renderedWidth;
-        }
-      } else {
-        scale = renderedWidth / imgWidth;
-        visibleWidth = renderedWidth;
-        visibleHeight = renderedHeight;
-      }
-      const left = overlayRect.left + offsetX + leftRatio * imgWidth * scale;
-      const top = overlayRect.top + offsetY + topRatio * imgHeight * scale;
-      const width = widthRatio * imgWidth * scale;
-      const height = heightRatio * imgHeight * scale;
-      canvas.style.position = 'absolute';
-      canvas.style.left = left + 'px';
-      canvas.style.top = top + 'px';
-      canvas.style.width = width + 'px';
-      canvas.style.height = height + 'px';
-      canvas.style.maxWidth = 'none';
-      canvas.style.maxHeight = 'none';
-      canvas.style.minWidth = '0';
-      canvas.style.minHeight = '0';
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-    // Nuevo: observar cambios en el overlay
-    if (window.ResizeObserver) {
-      const ro = new ResizeObserver(resizeCanvas);
-      ro.observe(overlay);
-    }
-    // También ajustar si la imagen overlay cambia de src
-    overlay.addEventListener('load', resizeCanvas);
-  };
-}
-window.addEventListener('load', adaptCanvasToOverlay);
-  // Abrir ventana
-  let positions = {};
-  function closeWindow(id){
-    const win = document.getElementById(id);
-    positions[id] = {left: win.style.left, top: win.style.top};
-    win.style.display='none';
-  }
-  function openWindow(id){
-    const win = document.getElementById(id);
-    win.style.display='flex';
-    if(positions[id]){
-      win.style.left = positions[id].left;
-      win.style.top = positions[id].top;
-    }
-    bringToFront(win);
-  }
-
-  // Z-index dinámico
-  let topZ = 10;
-  function bringToFront(el){
-    topZ++;
-    el.style.zIndex = topZ;
-  }
-
-// función que hace draggable una ventana (limitada al área .canvas)
-function makeWindowDraggable(win) {
-  const bar = win.querySelector('.title-bar');
-  if (!bar) return;
-
-  let offsetX = 0, offsetY = 0;
-  let dragging = false;
-  const canvas = document.querySelector('.canvas'); // tu canvas tiene clase "canvas"
-  if (!canvas) return;
-
-  bar.addEventListener('mousedown', (e) => {
-    e.preventDefault();
-    const canvasRect = canvas.getBoundingClientRect();
-
-    // posición del puntero dentro del canvas
-    const pointerX = e.clientX - canvasRect.left;
-    const pointerY = e.clientY - canvasRect.top;
-
-    // offset relativo a la esquina de la ventana
-    offsetX = pointerX - win.offsetLeft;
-    offsetY = pointerY - win.offsetTop;
-
-    dragging = true;
-    bringToFront(win);
-
-    function onMouseMove(ev) {
-      if (!dragging) return;
-      const rect = canvas.getBoundingClientRect();
-
-      // nueva posición relativa al canvas
-      let newLeft = ev.clientX - rect.left - offsetX;
-      let newTop  = ev.clientY - rect.top  - offsetY;
-
-      // límites (que la ventana no salga del canvas)
-      const maxLeft = canvas.clientWidth - win.offsetWidth;
-      const maxTop  = canvas.clientHeight - win.offsetHeight;
-
-      if (newLeft < 0) newLeft = 0;
-      if (newTop  < 0) newTop  = 0;
-      if (newLeft > maxLeft) newLeft = maxLeft;
-      if (newTop  > maxTop) newTop  = maxTop;
-
-      win.style.left = newLeft + 'px';
-      win.style.top  = newTop  + 'px';
-    }
-
-    function onMouseUp() {
-      dragging = false;
-      // guardar posición por si cierras/abres (tu objeto positions ya existe)
-      positions[win.id] = { left: win.style.left, top: win.style.top };
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    }
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  });
-}
-
-// Inicializar las ventanas ya existentes
-document.querySelectorAll('.window').forEach(makeWindowDraggable);
-  
-
-  // Diccionario de traducciones
-  const translations = {
-    en: {
-      loading: "Loading",
-      // Iconos escritorio
-      aboutIcon: "About Me",
-      projectsIcon: "Projects",
-      skillsIcon: "Skills",
-      programsIcon: "Programs",
-      educationIcon: "Education",
-      achievementsIcon: "Achievements",
-      socialIcon: "Social",
-      contactIcon: "Contact Me",
-      cvIcon: "CV",
-      // Ventana contacto
-      contactTitle: "Contact Me",
-      contactMsg: "Send me a message directly to my email:",
-      namePlaceholder: "Your name",
-      emailPlaceholder: "Your email",
-      msgPlaceholder: "Your message...",
-      sendBtn: "Send",
-      contactNote: "⚠ Note: This form will open your email client. ",
-      // Barra de tareas y ayuda
-      helpBtn: "Help",
-      helpTooltip: "Click the desktop icons to open windows with your information, projects, skills, and social networks.",
-      // CV
-      cvTitle: "CV",
-      cvMsg: "Here you can see my professional summary and download my CV.",
-      cvDownload: "Download PDF",
-      // Programas
-      programsTitle: "Programs & Skills",
-      techSkills: "⚙️ Technical",
-      artSkills: "🎨 Artistic",
-      // Educación
-      educationTitleWin: "Education",
-      degreeTitle: "🎓 Degree in Video Game Design and Development",
-      degreeSchool: "Technical School of Computer Engineering - Rey Juan Carlos University",
-      degreePlace: "Location: Madrid",
-      degreeGrade: "Grade: 7.7",
-      bachTitle: "🎓 High School",
-      bachSchool: "La Salle Virlecha",
-      bachPlace: "Location: Antequera, Málaga",
-      bachGrade: "Grade: 8.5",
-      certTitle: "📜 Courses and Certificates",
-      certB1: "B1 Certificate – Cambridge",
-
-      // Logros
-      achievementsTitle: "Achievements",
-      ach1Title: "🏆 Winner – 5th Game Jam Game Scholars Edition",
-      ach1Project: "Deadly Tiles",
-      ach2Title: "🥈 2nd place – Gamejolt Awards 2022",
-      category: "Category:",
-      ach2Cat: "Fangame of the Year",
-      ach2Project: "The Glitched Attraction",
-      ach3Title: "⭐ Community Impact",
-      cuatromillones: "+4 million",
-      dosmillones: "+2 million",
-      views: "views and",
-      downloads: "downloads",
-      ach3Project: "The Glitched Attraction",
-      ach4Title: "🌍 International Recognition",
-      ach4Desc: "Trending in video games in USA and multiple countries",
-      ach4Project: "The Glitched Attraction",
-      project: "Project:",
-      
-      // Habilidades
-      skillsTitle: "Skills",
-      skillsTypeLabel: "Type:",
-      skillsTypeTech: "Technical",
-      skillsTypeArt: "Artistic",
-      unity: "Unity",
-      visualStudio: "Visual Studio / VS Code",
-      pycharm: "Pycharm",
-      git: "Git & GitHub",
-      databases: "Databases (SQL/NoSQL)",
-      concurrentProgramming: "Concurrent Programming (C#, threads, semaphores, synchronization)",
-      cuda: "CUDA (GPU programming, basic level)",
-      threeDsMax: "3ds Max",
-      photoshop: "Photoshop",
-      substancePainter: "Substance Painter",
-      cinema4D: "Cinema 4D",
-      blender: "Blender",
-      adobeAnimate: "Adobe Animate",
-
-
-      // Redes sociales
-      socialTitle: "Social Networks",
-      linkedin: "LinkedIn",
-      itchio: "Itch.io",
-      gamejolt: "Gamejolt",
-      github: "GitHub",
-      artstation: "ArtStation",
-      youtube: "YouTube",
-
-      // Sobre mi
-      aboutTitle: "About Me",
-      greeting: "Hi, I'm Alberto 👋",
-      bio1: "I am a programmer with experience in game development, focused on systems and backend programming.",
-      bio2: "Since 2018 I have participated in indie projects, working with languages like C#, Python, and JavaScript.",
-      bio2extra: "I have experience in multiplayer programming in C# and VR development.",
-      bio3: "I graduated from URJC in Video Game Design and Development.",
-      bio4: "I am passionate about creating immersive worlds and learning new technologies to improve every project.",
-      experienceTitle: "Experience",
-      educationTitle: "Education",
-      passionTitle: "Passion",
-      languagesTitle: "Languages",
-      lang1: "Spanish (native)",
-      lang2: "English (fluent)",
-      interestsTitle: "Interests",
-      interest1: "Indie games",
-      interest2: "Multiplayer programming",
-      interest3: "Virtual reality",
-      interest4: "AI and new technologies",
-      projectsTitle: "Projects",
-
-      //Proyectos 
-      genreLabel: "Genre:",
-      skillsLabel: "Used Skills:",
-      durationLabel: "Duration:",
-      roleLabel: "My Role:",
-      complete: "Complete"
-    },
-    es: {
-      loading: "Cargando",
-      // Iconos escritorio
-      aboutIcon: "Sobre mí",
-      projectsIcon: "Proyectos",
-      skillsIcon: "Habilidades",
-      programsIcon: "Programas",
-      educationIcon: "Educación",
-      achievementsIcon: "Logros",
-      socialIcon: "Redes",
-      contactIcon: "Contáctame",
-      cvIcon: "Currículum",
-      // Ventana contacto
-      contactTitle: "Contáctame",
-      contactMsg: "Envíame un mensaje directamente a mi correo:",
-      namePlaceholder: "Tu nombre",
-      emailPlaceholder: "Tu correo",
-      msgPlaceholder: "Tu mensaje...",
-      sendBtn: "Enviar",
-      contactNote: "⚠ Nota: Este formulario abrirá tu cliente de correo.",
-      // Barra de tareas y ayuda
-      helpBtn: "Ayuda",
-      helpTooltip: "Haz clic en los iconos del escritorio para abrir las ventanas con tu información, proyectos, habilidades y redes sociales.",
-      // CV
-      cvTitle: "Currículum",
-      cvMsg: "Aquí puedes ver mi resumen profesional y descargar mi CV.",
-      cvDownload: "Descargar PDF",
-      // Programas
-      programsTitle: "Programas y Competencias",
-      techSkills: "⚙️ Técnicos",
-      artSkills: "🎨 Artísticos",
-      // Educación
-      educationTitleWin: "Educación",
-      degreeTitle: "🎓 Grado en Diseño y Desarrollo de Videojuegos",
-      degreeSchool: "Escuela tecnica superior de ingenieria informatica - Universidad Rey Juan Carlos",
-      degreePlace: "Lugar: Madrid",
-      degreeGrade: "Media: 7,7",
-      bachTitle: "🎓 Bachillerato",
-      bachSchool: "La Salle Virlecha",
-      bachPlace: "Lugar: Antequera, Málaga",
-      bachGrade: "Media: 8.5",
-      certTitle: "📜 Cursos y Certificados",
-      certB1: "Certificado B1 – Cambridge",
-
-      // Logros
-      achievementsTitle: "Logros",
-      ach1Title: "🏆 Ganador – 5ª Edición Game Jam Game Scholars",
-      ach1Project: "Deadly Tiles",
-      ach2Title: "🥈 2º puesto – Gamejolt Awards 2022",
-      category: "Categoría:",
-      ach2Cat: "Fangame del año",
-      ach2Project: "The Glitched Attraction",
-      ach3Title: "⭐ Impacto en la comunidad",
-      views: "de visualizaciones y",
-      cuatromillones: "+4 millones",
-      dosmillones: "+2 millones",
-      downloads: "de descargas",
-      ach3Project: "The Glitched Attraction",
-      ach4Title: "🌍 Reconocimiento internacional",
-      ach4Desc: "Tendencias de videojuegos en EE.UU. y múltiples países",
-      ach4Project: "The Glitched Attraction",
-      project: "Proyecto:",
-
-      // Habilidades
-      skillsTitle: "Habilidades",
-      skillsTypeLabel: "Tipo:",
-      skillsTypeTech: "Técnico",
-      skillsTypeArt: "Artístico",
-      unity: "Unity",
-      visualStudio: "Visual Studio / VS Code",
-      pycharm: "Pycharm",
-      git: "Git & GitHub",
-      databases: "Bases de datos (SQL y NoSQL)",
-      concurrentProgramming: "Programación concurrente (C#, hilos, semáforos, sincronización)",
-      cuda: "CUDA (programación en GPU, nivel básico)",
-      threeDsMax: "3ds Max",
-      photoshop: "Photoshop",
-      substancePainter: "Substance Painter",
-      cinema4D: "Cinema 4D",
-      blender: "Blender",
-      adobeAnimate: "Adobe Animate",
-
-
-      // Redes sociales
-      socialTitle: "Redes sociales",
-      linkedin: "LinkedIn",
-      itchio: "Itch.io",
-      gamejolt: "Gamejolt",
-      github: "GitHub",
-      artstation: "ArtStation",
-      youtube: "YouTube",
-
-      // Sobre mi
-      aboutTitle: "Sobre mí",
-      greeting: "Hola, soy Alberto 👋",
-      bio1: "Soy programador con experiencia en desarrollo de videojuegos, con enfoque en programación de sistemas y backend.",
-      bio2: "Desde 2018 he participado en proyectos indie, trabajando con lenguajes como C#, Python y JavaScript.",
-      bio2extra: "Tengo experiencia en programación multijugador en C# y desarrollo de experiencias VR.",
-      bio3: "Me gradué en la URJC en Diseño y Desarrollo de Videojuegos.",
-      bio4: "Me apasiona crear mundos inmersivos y seguir aprendiendo nuevas tecnologías para mejorar cada proyecto en el que participo.",
-      experienceTitle: "Experiencia",
-      educationTitle: "Educación",
-      passionTitle: "Pasión",
-      languagesTitle: "Idiomas",
-      lang1: "Español (nativo)",
-      lang2: "Inglés (fluido)",
-      interestsTitle: "Intereses",
-      interest1: "Videojuegos indie",
-      interest2: "Programación multiplayer",
-      interest3: "Realidad virtual",
-      interest4: "IA y nuevas tecnologías",
-      projectsTitle: "Proyectos",
-
-      //Proyectos 
-      genreLabel: "Género:",
-      skillsLabel: "Habilidades usadas:",
-      durationLabel: "Duración:",
-      roleLabel: "Mi rol:",
-      complete: "Completar"
-    }
-  };
-
-  //skills
-  const skillsData = {
-    technical: [
-      { name: "C#", value: 75 },
-      { name: "JavaScript", value: 75 },
-      { name: "Python", value: 70 },
-      { name: "Java", value: 20 },
-      { name: "C++", value: 40 },
-      { name: "VR Development", value: 40 },
-      { name: "Multiplayer Programming", value: 60 },
-      { name: "Algorithm", value: 30 },
-      { name: "Unity", value: 75 },
-      { name: "Optimization", value:40},
-      { name: "Bases de datos (SQL/NoSQL)", value:50},
-      { name: "CUDA / GPU programming", value:40},
-      { name: "Github", value:70},
-    ],
-    artistic: [
-      { name: "Texturizado", value: 95 },
-      { name: "Modelado 3D", value: 90 },
-      { name: "Animación 3D", value: 75 },
-      { name: "Concept Art", value: 30 },
-      { name: "Ilustración 2D", value: 30 },
-      { name: "Rigging 3D", value: 70 },
-      { name: "Lighting & Rendering", value: 95 },
-      { name: "Particle Effects / VFX", value: 60 },
-      { name: "UI/UX Design", value: 85 },
-      { name: "Shaders / Materials", value: 60 },
-
-    ]
-  };
-
-  // Función para interpolar color de rojo a amarillo a verde
-  function getColor(percent) {
-    let r, g;
-    if(percent < 50) { // rojo a amarillo
-      r = 255;
-      g = Math.floor(5.1 * percent);
-    } else { // amarillo a verde
-      g = 255;
-      r = Math.floor(510 - 5.10 * percent);
-    }
-    return `rgb(${r},${g},0)`;
-  }
-
-  // Renderizar habilidades
-  function renderSkills(type) {
-    const container = document.getElementById("skillsContainer");
-    container.innerHTML = "";
-    // Ordenar de mayor a menor
-    const sorted = skillsData[type].sort((a,b) => b.value - a.value);
-    sorted.forEach(skill => {
-      const skillDiv = document.createElement("div");
-      skillDiv.style.marginBottom = "10px";
-      skillDiv.innerHTML = `
-        <div style="display:flex; justify-content: space-between; font-size:14px; font-weight:bold; margin-bottom:3px;">
-          <span>${skill.name}</span><span>${skill.value}%</span>
+        <div class="window" id="cv">
+            <div class="title-bar">
+                <span data-i18n="cvTitle">CV</span>
+                <button class="close-btn" onclick="closeWindow('cv')">×</button>
+            </div>
+            <div class="window-content text-center">
+                <p data-i18n="cvMsg">Descarga mi CV en PDF</p>
+                <a href="pdf/CV.pdf" class="btn-primary" download data-i18n="cvDownload">Descargar</a>
+            </div>
         </div>
-        <div style="background:#ccc; border-radius:4px; height:15px; overflow:hidden;">
-          <div style="width:${skill.value}%; height:100%; background:${getColor(skill.value)}; border-radius:4px;"></div>
-        </div>
-      `;
-      container.appendChild(skillDiv);
-    });
-  }
 
-  // Inicialización
-  renderSkills("technical");
+    </main>
 
-  // Cambio de tipo de habilidades
-  document.getElementById("skillsType").addEventListener("change", e => {
-    renderSkills(e.target.value);
-  });
-
-  //proyectos
-  // Traducciones
-  translations.en.projectsTitle = "Projects";
-  translations.es.projectsTitle = "Proyectos";
-
-  // Datos de proyectos
-  // Traducciones
-  translations.en.projectsTitle = "Projects";
-  translations.es.projectsTitle = "Proyectos";
-
-// Project data
-const projectsData = [
-  {
-    id: "proj1",
-    title: "Beyond Salvation: Remnant Protocol",
-    type: "image",
-    src: "img/Proyectos/BeyondVR.jpeg",
-    genre: "VR Survival Horror",
-    skills: "C#, Texturing, 3D Modeling, Animation, Level Design, VR Optimization, VR Interaction",
-    duration: "3 months",
-    role: "Technical Artist"
-  },
-  {
-    id: "proj2",
-    type: "image",
-    src: "img/Proyectos/Deadly.png",
-    title: "Deadly Tiles (Game Jam Project)",
-    genre: "Puzzle, Horror",
-    skills: "Texturing, Animation, Lighting, 3D Modeling, Optimization, Shaders",
-    duration: "1 month",
-    role: "Lead Artist / Technical Artist"
-  },
-  {
-    id: "proj3",
-    type: "video",
-    src: "img/Proyectos/Glitched.mp4",
-    title: "The Glitched Attraction",
-    genre: "Survival Horror",
-    skills: "Set Dressing, 3D Modeling, Animation, Texturing, Enemy & Environment Logic, Optimization",
-    duration: "3 years 4 months",
-    role: "Lead Artist"
-  },
-  {
-    id: "proj4",
-    type: "image",
-    src: "img/Proyectos/OverScaled.png",
-    title: "Overscaled (Game Jam Project)",
-    genre: "3D Platformer, Puzzle",
-    skills: "Environment Creation, Level Design, Game Logic, Programming",
-    duration: "4 days",
-    role: "Lead Artist / Technical Artist"
-  },
-  {
-    id: "proj5",
-    type: "video",
-    src: "img/Proyectos/Beyond.mp4",
-    title: "Beyond Salvation",
-    genre: "Survival Horror",
-    skills: "3D Modeling, Texturing, Level Design, Game Logic",
-    duration: "2 years",
-    role: "Lead Artist / Technical Artist"
-  },
-  {
-    id: "proj6",
-    type: "image",
-    src: "img/Proyectos/Noah.png",
-    title: "Noah's Countdown",
-    genre: "2D Platformer",
-    skills: "Level Design, Environment Creation, 2D Modeling, Texturing",
-    duration: "1 month",
-    role: "Lead Artist"
-  },
-  {
-    id: "proj7",
-    type: "video",
-    src: "img/Proyectos/Christmas.mp4",
-    title: "Christmas with Freddy's",
-    genre: "2D Point-and-Click, Horror",
-    skills: "Set Dressing, Texturing, 3D/2D Modeling, Programming",
-    duration: "5 months",
-    role: "Artist & Level Designer"
-  },
-  {
-    id: "proj8",
-    type: "image",
-    src: "img/Proyectos/Purgatory.webp",
-    title: "The Purgatory and the Stolen Souls",
-    genre: "2D Run and Gun",
-    skills: "Animation, 2D Modeling, Level Design, Game Logic",
-    duration: "5 months",
-    role: "Programmer & Level Designer"
-  }
-];
-  function renderProjectList() {
-    const container = document.getElementById("projectsList");
-    container.innerHTML = "";
-
-    const lang = document.getElementById("langSelect").value || "en";
-    const t = translations[lang];
-    projectsData.forEach(project => {
-      const card = document.createElement("div");
-      card.style.display = "flex";
-      card.style.gap = "15px";
-      card.style.border = "1px solid #8ba8d8";
-      card.style.borderRadius = "6px";
-      card.style.padding = "10px";
-      card.style.cursor = "pointer";
-      card.style.transition = "background 0.2s";
-      card.onmouseover = () => card.style.background = "rgba(58,110,165,0.1)";
-      card.onmouseout = () => card.style.background = "transparent";
-      card.onclick = () => openProjectDetail(project);
-
-      // Miniatura
-      let mediaHTML = "";
-      if(project.type === "image") {
-        mediaHTML = `<img src="${project.src}" alt="${project.title}" style="width:120px; height:80px; object-fit:cover; border-radius:4px;">`;
-      } else if(project.type === "video") {
-        mediaHTML = `
-          <video autoplay loop muted playsinline style="width:120px; height:80px; object-fit:cover; border-radius:4px;">
-            <source src="${project.src}" type="video/mp4">
-          </video>
-        `;
-      }
-
-      // Información traducida
-      const infoHTML = `
-        <div style="display:flex; flex-direction:column; justify-content:center;">
-          <div style="font-weight:bold; font-size:14px;">${project.title}</div>
-          <div style="font-size:12px; color:#555;"><strong>${t.genreLabel || "Género:"}</strong> ${project.genre}</div>
-          <div style="font-size:12px; color:#555;"><strong>${t.skillsLabel || "Habilidades:"}</strong> ${project.skills}</div>
-          <div style="font-size:12px; color:#555;"><strong>${t.durationLabel || "Duración:"}</strong> ${project.duration}</div>
-          <div style="font-size:12px; color:#555;"><strong>${t.roleLabel || "Rol:"}</strong> ${project.role}</div>
-        </div>
-      `;
-
-      card.innerHTML = mediaHTML + infoHTML;
-      container.appendChild(card);
-    });
-  }
-
-  renderProjectList();
-
-  // Abrir ventana de detalle de proyecto dentro del canvas
-  function openProjectDetail(project) {
-    let detailWin = document.getElementById(project.id + "_detail");
-    if(!detailWin) {
-      detailWin = document.createElement("div");
-      detailWin.className = "window";
-      detailWin.id = project.id + "_detail";
-      detailWin.style.top = "100px";
-      detailWin.style.left = "150px";
-      detailWin.style.minWidth = "300px";
-      detailWin.style.maxWidth = "600px";
-      detailWin.style.display = "flex";
-      detailWin.style.flexDirection = "column";
-
-      detailWin.innerHTML = `
-        <div class="title-bar">
-          ${project.title}
-          <button class="close" onclick="closeWindow('${detailWin.id}')">×</button>
-        </div>
-        <div class="content">
-          <div style="margin-bottom:10px;"><strong>${t("genreLabel")}</strong> ${project.genre}</div>
-          <div style="margin-bottom:10px;"><strong>${t("skillsLabel")}</strong> ${project.skills}</div>
-          <div style="margin-bottom:10px;"><strong>${t("durationLabel")}</strong> ${project.duration}</div>
-          <div style="margin-bottom:10px;"><strong>${t("roleLabel")}</strong> ${project.role}</div>
-          <div style="margin-bottom:10px;">
-            ${project.type === "image" ? `<img src="${project.src}" style="width:100%; border-radius:6px;">` :
-            `<video autoplay loop muted playsinline style="width:100%; border-radius:6px;">
-              <source src="${project.src}" type="video/mp4">
-            </video>`}
-          </div>
-          <p>${t("complete")}</p>
-        </div>
-      `;
-      document.querySelector(".canvas").appendChild(detailWin);
-      bringToFront(detailWin);
-    } else {
-      detailWin.style.display = "flex";
-      bringToFront(detailWin);
-    }
-  }
-
-  // Función para cambiar idioma
-  function setLanguage(lang) {
-    // Traduce textos internos
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-      const key = el.getAttribute("data-i18n");
-      if (translations[lang] && translations[lang][key]) {
-        switch (el.tagName) {
-          case 'INPUT':
-          case 'TEXTAREA':
-          case 'BUTTON':
-            // Para botones => innerText
-            if (el.tagName === 'BUTTON') {
-              el.innerText = translations[lang][key];
-            } else {
-              // Para inputs/textarea => value (si es tipo botón) o placeholder (si lo quieres aparte)
-              el.value = translations[lang][key];
-            }
-            break;
-          case 'OPTION':
-            el.textContent = translations[lang][key];
-            break;
-          default:
-            el.innerText = translations[lang][key];
-        }
-      }
-    });
-
-    // Traduce placeholders (inputs con placeholder)
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-      const key = el.getAttribute('data-i18n-placeholder');
-      if (translations[lang] && translations[lang][key]) {
-        el.placeholder = translations[lang][key];
-      }
-    });
-  }
-  
-  // Inicialización (default inglés)
-  setLanguage("en");
-  
-  // Cambio dinámico
-  document.getElementById("langSelect").addEventListener("change", e => {
-  setLanguage(e.target.value);
-  renderProjectList();
-  });
-  const helpBtn = document.getElementById("helpBtn");
-  const helpTooltip = document.getElementById("helpTooltip");
-
-  helpBtn.addEventListener("click", () => {
-    if(helpTooltip.style.display === "block") {
-      helpTooltip.style.display = "none";
-    } else {
-      helpTooltip.style.display = "block";
-      setTimeout(() => helpTooltip.style.display = "none", 6000); // se oculta tras 6s
-    }
-  });
-
-  function updateClock() {
-  const now = new Date();
-  const hours = now.getHours().toString().padStart(2,'0');
-  const minutes = now.getMinutes().toString().padStart(2,'0');
-  const seconds = now.getSeconds().toString().padStart(2,'0');
-  const options = { weekday: 'short', month: 'short', day: 'numeric' };
-  const dateStr = now.toLocaleDateString('es-ES', options); // puedes cambiar a 'en-US'
-  document.getElementById('taskbarClock').innerText = `${hours}:${minutes}:${seconds}  ${dateStr}`;
-}
-
-// Actualiza cada segundo
-setInterval(updateClock, 1000);
-updateClock(); // Inicial
-
-function arrangeIconsCircle(radiusPercent = 0.35) {
-  const container = document.getElementById('desktopIcons');
-  if (!container) return;
-
-  const icons = container.querySelectorAll('.icon');
-  const centerX = container.offsetWidth / 2;
-  const centerY = container.offsetHeight / 2;
-
-  // Calculamos radio relativo al tamaño del contenedor
-  const radius = Math.min(container.offsetWidth, container.offsetHeight) * radiusPercent;
-
-  const total = icons.length;
-
-  icons.forEach((icon, i) => {
-    const angle = (i / total) * 2 * Math.PI;
-    const x = centerX + radius * Math.cos(angle);
-    const y = centerY + radius * Math.sin(angle);
-    icon.style.left = `${x}px`;
-    icon.style.top = `${y}px`;
-  });
-}
-
-// Ejecutar al cargar y al redimensionar ventana
-window.addEventListener('load', () => arrangeIconsCircle(0.35));
-window.addEventListener('resize', () => arrangeIconsCircle(0.35));
-
-window.addEventListener("load", () => {
-  const loader = document.getElementById("loadingScreen");
-  
-  // Esperar 2.5s y hacer fade out
-  setTimeout(() => {
-    loader.style.opacity = "0";
-    setTimeout(() => loader.style.display = "none", 1000); // quitarlo tras el fade
-  }, 2500);
-});
-</script>
-
+    <footer class="taskbar">
+        <button id="startBtn" class="start-btn">
+            <span class="logo-win">❖</span> Inicio
+        </button>
+        <div class="taskbar-divider"></div>
+        <div id="clock" class="clock">00:00</div>
+    </footer>
+    <script src="script/script.js"></script>
 </body>
 </html>
